@@ -1,0 +1,53 @@
+Submesh 1, material 1
+=========================================================
+A_C_BigHornRam_01_head_000_c0_000_ab
+A_C_BigHornRam_01_head_000_c0_000_nm
+A_C_BigHornRam_01_head_000_c0_000_ma
+A_C_BigHornRam_01_head_000_c0_000_mb
+givemechecker
+givemechecker
+givemechecker
+=========================================================
+Submesh 1, material 2
+=========================================================
+A_C_BigHornRam_01_head_000_c0_000_ab
+A_C_BigHornRam_01_head_000_c0_000_nm
+A_C_BigHornRam_01_head_000_c0_000_ma
+A_C_BigHornRam_01_head_000_c0_000_mb
+a_c_bighornram_01_head_000_c0_000_fur
+=========================================================
+Submesh 2, material 1
+=========================================================
+A_C_BigHornRam_01_lowr_001_c0_000_ab
+A_C_BigHornRam_01_lowr_001_c0_000_nm
+A_C_BigHornRam_01_lowr_001_c0_000_ma
+A_C_BigHornRam_01_lowr_001_c0_000_mb
+givemechecker
+givemechecker
+=========================================================
+Submesh 3, material 1
+=========================================================
+A_C_BigHornRam_01_teef_000_c0_000_ab
+A_C_BigHornRam_01_teef_000_c0_000_nm
+A_C_BigHornRam_01_teef_000_c0_000_ma
+A_C_BigHornRam_01_teef_000_c0_000_mb
+givemechecker
+givemechecker
+=========================================================
+Submesh 4, material 1
+=========================================================
+A_C_BigHornRam_01_uppr_000_c0_000_ab
+A_C_BigHornRam_01_uppr_000_c0_000_nm
+A_C_BigHornRam_01_uppr_000_c0_000_ma
+A_C_BigHornRam_01_uppr_000_c0_000_mb
+givemechecker
+givemechecker
+=========================================================
+Submesh 4, material 2
+=========================================================
+A_C_BigHornRam_01_uppr_000_c0_000_ab
+A_C_BigHornRam_01_uppr_000_c0_000_nm
+A_C_BigHornRam_01_uppr_000_c0_000_ma
+A_C_BigHornRam_01_uppr_000_c0_000_mb
+a_c_bighornram_01_uppr_000_c0_000_fur
+=========================================================
