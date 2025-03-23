@@ -2,17 +2,19 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 export class Character {
-    #scene;  // Proprietà privata
-    #loader;  // Proprietà privata
-    #model;  // Proprietà privata
-    #mixer;  // Proprietà privata
+
+    // Private attributes
+    #scene;  
+    #loader; 
+    #model;  
+    #mixer;  
 
     constructor(scene) {
-        this.#scene = scene;  // Assegna il valore alla proprietà privata
+        this.#scene = scene;
         this.#Init();
     }
 
-    // private method
+    // Private method
     #Init() {
         this.#loader = new GLTFLoader();
         this.#model = null;
@@ -23,31 +25,27 @@ export class Character {
 
     #LoadModel() {
         this.#loader.load('ninja_-_walking/scene.gltf', (gltf) => {
-            // Aggiungi il modello alla scena
+            // Take model and add it to the scene
             this.#model = gltf.scene;
             this.#scene.add(this.#model);
-            this.#model.position.set(0, 1, 0); // Posiziona il modello
+            this.#model.position.set(0, 1, 0);
 
-            // Verifica se ci sono animazioni
+            // Verify if there are animations
             if (gltf.animations.length > 0) {
-                console.log("Animazioni trovate:", gltf.animations); // Mostra le animazioni
+                console.log("Animazioni trovate:", gltf.animations);
             } else {
                 console.log("Nessuna animazione trovata nel modello.");
             }
 
-            // Imposta il mixer di animazione
+            // Create animations mixer
             this.#mixer = new THREE.AnimationMixer(this.#model);
             
-            // Riproduce solo la prima animazione
+            // Reproduce just first animation
             if (gltf.animations.length > 0) {
-                const firstAnimation = gltf.animations[0]; // Ottieni la prima animazione
-                this.#mixer.clipAction(firstAnimation).play(); // Avvia la prima animazione
+                const firstAnimation = gltf.animations[0]; 
+                this.#mixer.clipAction(firstAnimation).play(); 
             }
 
-            // Notifica che  il modello è stato caricato
-            if(this.isModelLoaded){
-                this.isModelLoaded();
-            }
         }, undefined, (error) => {
             console.error(error);
         });
@@ -59,16 +57,17 @@ export class Character {
         return this.#model;
     }
 
-    // Getter per la posizione del modello
+    // Getter for model position
     get position() {
         return this.#model ? this.#model.position : null;
     }
 
-    // Getter per l'orientamento del modello
+    // Getter for model orientation
     get orientation() {
-        return this.#model ? this.#model.rotation : null; // Uso `rotation` al posto di `orientation`
+        return this.#model ? this.#model.rotation : null;
     }
 
+    // Getter for mixer
     get mixer() {
         return this.#model ? this.#mixer : null;
     }

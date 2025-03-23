@@ -3,7 +3,7 @@ import * as THREE from 'three';
 
 export class Camera {
 
-    // private attributes
+    // Private attributes
     #scene;
     #perspectiveCamera;
     #character;
@@ -15,8 +15,6 @@ export class Camera {
         this.#scene = scene;
         this.#character = character;
         this.#Init();
-        // this.#character = character;
-        // this.#character.isModelLoaded = this.#Init.bind(this);
     }
     
     #Init() {
@@ -24,23 +22,17 @@ export class Camera {
         this.#thirdPersonCameraOffset = new THREE.Vector3(0, 2, -3);
         this.#firstPersonCameraOffset = new THREE.Vector3(0, 2, -3);
         this.#perspectiveCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        // this.#camera.position.copy(this.#character.model.position).add(this.#thirdPersonCameraOffset);
-        // this.#camera.lookAt(this.#character.model.position);
         this.#scene.add(this.#perspectiveCamera);
     }
 
+    // Getter for third person view offset
     get thirdPersonCameraOffset () {
         return this.#thirdPersonCameraOffset;
     }
+
+    // Getter for perspective camera (actually the real camera)
     get perspectiveCamera() {
         return this.#perspectiveCamera;
-    }
-
-    updateCameraPosition() {
-        if (this.#character.model) {
-            this.#perspectiveCamera.position.copy(this.#character.model.position).add(this.#thirdPersonCameraOffset);
-            this.#perspectiveCamera.lookAt(this.#character.model.position);
-        }
     }
 
 }

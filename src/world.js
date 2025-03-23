@@ -2,23 +2,23 @@ import * as THREE from 'three';
 
 export class World {
     
-    // private
+    // Private attributes
     #scene;  
     #ambientLight;
     #floor;
 
     constructor(scene) {
-        this.#scene = scene;  // Assegna il valore alla proprietà privata
+        this.#scene = scene;
         this.#Init();
     }
     
-    // private method
+    // Private method
     #Init() {
         this.#AddLights();     
         this.#AddFloor();   
     }
 
-    // private method
+    // Private method
     #AddLights() {
         const color = 0xFFFFFF;
         const intensity = 1;
@@ -26,7 +26,7 @@ export class World {
         this.#scene.add(this.#ambientLight);
     }
 
-    // private method
+    // Private method
     #AddFloor() {
         this.#floor = new THREE.Mesh(
           new THREE.PlaneGeometry(60, 60, 10, 10),
@@ -42,6 +42,7 @@ export class World {
         this.#scene.add(this.#floor);
     }
 
+    // Getter for ambient light
     get ambientLight(){
         return this.#ambientLight;
     }
