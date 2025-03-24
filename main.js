@@ -9,6 +9,8 @@ import { Controller } from './src/controller.js';
 
 // Create scene, world, character and camera
 const scene = new THREE.Scene();
+const axesHelper = new THREE.AxesHelper( 5 );
+scene.add( axesHelper );
 const world = new World(scene);
 const character = new Character(scene);
 const camera = new Camera(scene, character);
@@ -26,9 +28,11 @@ function animate() {
   if (character.mixer) {
     character.mixer.update(0.01); 
   }
-  controller.updateCharacterPosition();
-  controller.updateCameraPosition();
+  controller.UpdateCharacterPosition();
+  controller.UpdateCameraPosition();
+  controller.UpdateCharacterAnimation();
   renderer.render(scene, camera.perspectiveCamera); 
 }
 
 renderer.setAnimationLoop(animate);
+
