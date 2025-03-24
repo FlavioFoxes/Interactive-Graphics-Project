@@ -1,4 +1,6 @@
 import * as THREE from 'three';
+import * as CANNON from 'cannon-es';
+
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 
@@ -8,15 +10,17 @@ export class Controller {
     #camera;
     #character;
     #controls;
+    #world;
     #moveForward;
     #moveBackward;
     #moveLeft;
     #moveRight;
     #moveSpeed;
 
-    constructor(camera, character, renderer){
+    constructor(camera, character, renderer, world){
         this.#camera = camera;
         this.#character = character;
+        this.#world = world;
         this.#moveSpeed = 0.05;
         this.#controls = new OrbitControls(this.#camera.perspectiveCamera, renderer.domElement);
         this.#controls.target.set(0, 0.5, 0);
@@ -51,7 +55,7 @@ export class Controller {
             if (event.key === 'd') this.#moveRight = false;
         });
     }
-
+    
     // Getter for forward motion
     get moveForward() {
         return this.#moveForward;
@@ -72,20 +76,30 @@ export class Controller {
     // Method for update of character position
     UpdateCharacterPosition() {
         if (this.#character.model) {
-            const orientation = this.#character.model.rotation.y;
+            const speed = this.#moveSpeed;
+
+            let movement = new CANNON.Vec3(0, 0, 0);
+
             if (this.#moveForward) {
-                this.#character.model.position.z += (this.#moveSpeed * Math.cos(orientation));
-                this.#character.model.position.x += (this.#moveSpeed * Math.sin(orientation));
+                movement.z += speed * Math.cos(this.#character.model.rotation.y);
+                movement.x += speed * Math.sin(this.#character.model.rotation.y);
             }
             if (this.#moveBackward) {
-                this.#character.model.position.z -= (this.#moveSpeed * Math.cos(orientation));
-                this.#character.model.position.x -= (this.#moveSpeed * Math.sin(orientation));
+                movement.z -= speed * Math.cos(this.#character.model.rotation.y);
+                movement.x -= speed * Math.sin(this.#character.model.rotation.y);
             }
+
             if (this.#moveLeft) this.#character.model.rotation.y += this.#moveSpeed;
             if (this.#moveRight) this.#character.model.rotation.y -= this.#moveSpeed;
+
+            this.#character.physicsBody.position.x += movement.x;
+            this.#character.physicsBody.position.z += movement.z;
+
+            this.#character.model.position.copy(this.#character.physicsBody.position);
+            this.#character.model.position.y -= 1;  
+            this.#world.physicsWorld.step(1 / 60);
         }
     }
-
     #ComputeCameraOffset() {
         const cameraOffset = new THREE.Vector3();
         cameraOffset.copy(this.#camera.thirdPersonCameraOffset);
@@ -145,4 +159,5 @@ export class Controller {
 
         }
     }
+
 }

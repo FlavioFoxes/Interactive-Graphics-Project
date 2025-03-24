@@ -6,13 +6,14 @@ import { World } from './src/world.js';
 import { Character } from './src/character.js';
 import { Camera } from './src/camera.js';
 import { Controller } from './src/controller.js';
+import CannonDebugger from 'cannon-es-debugger';
 
 // Create scene, world, character and camera
 const scene = new THREE.Scene();
 const axesHelper = new THREE.AxesHelper( 5 );
 scene.add( axesHelper );
 const world = new World(scene);
-const character = new Character(scene);
+const character = new Character(scene, world);
 const camera = new Camera(scene, character);
 
 // Create Renderer
@@ -21,10 +22,13 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 // Create Controller to play
-const controller = new Controller(camera, character, renderer);
+const controller = new Controller(camera, character, renderer, world);
 
+const cannonDebugger = new CannonDebugger(scene, world.physicsWorld, {});
 // Maybe this can be moved somewhere else (maybe in world.js?)
 function animate() {
+  world.physicsWorld.fixedStep();
+  cannonDebugger.update();
   if (character.mixer) {
     character.mixer.update(0.01); 
   }

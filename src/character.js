@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import * as CANNON from 'cannon-es';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 export class Character {
@@ -7,9 +8,12 @@ export class Character {
     #model;  
     #mixer;  
     #animations;
+    #world;
+    #physicsBody;
 
-    constructor(scene) {
+    constructor(scene, world) {
         this.#scene = scene;
+        this.#world = world;
         this.#Init();
     }
 
@@ -19,6 +23,17 @@ export class Character {
         this.#mixer = null;
         this.#animations = [];
         this.#LoadModel();
+        
+    }
+
+    #InitPhysics(){
+        this.#physicsBody = new CANNON.Body({
+            mass: 1, 
+            shape: new CANNON.Box(new CANNON.Vec3(0.5, 1, 0.5)),  
+            position: new CANNON.Vec3(this.#model.position.x, this.#model.position.y+2, this.#model.position.z),
+        });
+        this.#physicsBody.linearDamping = 0.99;
+        this.#world.physicsWorld.addBody(this.#physicsBody);
     }
 
     #LoadModel() {
@@ -34,9 +49,8 @@ export class Character {
                 console.log("Nessuna animazione trovata.");
             }
 
-            // Inizializza il mixer dopo il caricamento
             this.#mixer = new THREE.AnimationMixer(this.#model);
-
+            this.#InitPhysics();
         }, undefined, (error) => {
             console.error("Errore nel caricamento del modello:", error);
         });
@@ -60,5 +74,9 @@ export class Character {
 
     get animations() {
         return this.#animations;
+    }
+
+    get physicsBody() {
+        return this.#physicsBody;
     }
 }
