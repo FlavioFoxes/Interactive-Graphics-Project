@@ -7,15 +7,20 @@ export class World {
     #ambientLight;
     #floors;
     #walls;
+    #ceilings;
     #physicsWalls;
     #physicsFloor;
     #physicsWorld; 
 
+    #lights;
+
     constructor(scene) {
         this.#scene = scene;
         this.#floors = [];
+        this.#ceilings = [];
         this.#walls = [];
         this.#physicsWalls = [];
+        this.#lights = [];
         this.#Init();
     }
     
@@ -24,6 +29,7 @@ export class World {
         this.#AddLights();     
         this.#AddFloor();   
         this.#AddWalls();
+        this.#AddCeilings();
         this.#InitPhysics();
     }
 
@@ -32,27 +38,47 @@ export class World {
         this.#physicsWorld.gravity.set(0, -9.81, 0);
 
         this.#AddFloorsPhysics();
+        this.#AddCeilingsPhysics();
         this.#AddWallsPhysics();
     }
     // Private method
     #AddLights() {
-        const color = 0xFFFFFF;
-        const intensity = 1;
-        this.#ambientLight = new THREE.AmbientLight(color, intensity);
+        const color = 0xffffff; //0xff0000;
+        
+        this.#ambientLight = new THREE.AmbientLight(color, 0.7); // Aumentata l'intensità
         this.#scene.add(this.#ambientLight);
+    
+        const lightIntensity = 5; 
+        const lightDistance = 30; 
+        const decay = 1.5; 
+        const numLightsX = 10; 
+        const numLightsZ = 10; 
+        const spacing = 60 / (numLightsX + 1); 
+    
+        for (let i = 1; i <= numLightsX; i++) {
+            for (let j = 1; j <= numLightsZ; j++) {
+                const light = new THREE.PointLight(color, lightIntensity, lightDistance, decay);
+                light.position.set(-30 + i * spacing, 10 - 0.2, -30 + j * spacing); 
+                light.castShadow = true;
+                light.shadow.mapSize.width = 1024;
+                light.shadow.mapSize.height = 1024;
+                light.shadow.bias = -0.005; 
+                this.#scene.add(light);
+                this.#lights.push(light);
+            }
+        }
     }
-
+    
     // Private method
     #AddFloor() {
         const textureLoader = new THREE.TextureLoader();
-        const floor1Texture = textureLoader.load("Poliigon_ConcreteWallCladding_7856_BaseColor.jpg"); // Sostituisci con il percorso corretto
+        const floor1Texture = textureLoader.load("x.avif"); 
     
         floor1Texture.wrapS = THREE.RepeatWrapping;
         floor1Texture.wrapT = THREE.RepeatWrapping;
     
-        // Numero di ripetizioni basato sulle dimensioni del pavimento
-        const repeatX = 60 / 10; // Adatta il valore "10" in base alla dimensione della texture
-        const repeatZ = 60 / 10;
+        const repeatX = 60 / 5;
+        const repeatZ = 60 / 5;
     
         floor1Texture.repeat.set(repeatX, repeatZ);
     
@@ -67,7 +93,7 @@ export class World {
         this.#scene.add(floor1);
 
         // floor 2
-        const floor2Texture = textureLoader.load("Poliigon_ConcreteWallCladding_7856_Preview1.png"); // Sostituisci con il percorso corretto
+        const floor2Texture = textureLoader.load("metal-panel.avif"); 
     
         floor2Texture.wrapS = THREE.RepeatWrapping;
         floor2Texture.wrapT = THREE.RepeatWrapping;
@@ -102,18 +128,76 @@ export class World {
 
     }
     
+    #AddCeilings() {
+        const ceilingMaterial = new THREE.MeshStandardMaterial({ color: 0x808080 });
+        const textureLoader = new THREE.TextureLoader();
+        const ceiling1Texture = textureLoader.load("metal-panel.avif"); 
+        ceiling1Texture.wrapS = THREE.RepeatWrapping;
+        ceiling1Texture.wrapT = THREE.RepeatWrapping;
+        const repeatX = 60 / 10; 
+        const repeatZ = 60 / 10;
+    
+        ceiling1Texture.repeat.set(repeatX, repeatZ);
+    
+        const ceiling1 = new THREE.Mesh(
+            new THREE.PlaneGeometry(60, 60),
+            new THREE.MeshStandardMaterial({ map: ceiling1Texture })
 
+        );
+        ceiling1.rotation.x = Math.PI / 2; 
+        ceiling1.position.y = 10; 
+        ceiling1.position.z = 0; 
+        this.#scene.add(ceiling1);
+        this.#ceilings.push(ceiling1);
+    
+        const ceiling2 = new THREE.Mesh(
+            new THREE.PlaneGeometry(60, 60),
+            ceilingMaterial
+        );
+        ceiling2.rotation.x = Math.PI / 2;
+        ceiling2.position.y = 10;
+        ceiling2.position.z = 60;
+        this.#scene.add(ceiling2);
+        this.#ceilings.push(ceiling2);
+    }
+    
+    #AddCeilingsPhysics() {
+        for (const ceiling of this.#ceilings) {
+            const ceilingShape = new CANNON.Plane(); 
+    
+            const ceilingBody = new CANNON.Body({
+                mass: 0, 
+                shape: ceilingShape,
+                material: new CANNON.Material("ceilingMaterial")
+            });
+    
+            ceilingBody.position.set(ceiling.position.x, ceiling.position.y, ceiling.position.z);
+            ceilingBody.quaternion.setFromEuler(Math.PI / 2, 0, 0);
+    
+            this.#physicsWorld.addBody(ceilingBody);
+        }
+    }
+    
     #AddWalls() {
         const wallMaterial = new THREE.MeshStandardMaterial({ color: 0x808080 });
+        const textureLoader = new THREE.TextureLoader();
+        const wallTexture = textureLoader.load("metal-panel.avif"); 
+        wallTexture.wrapS = THREE.RepeatWrapping;
+        wallTexture.wrapT = THREE.RepeatWrapping;
+        const repeatX = 60 / 20; 
+        const repeatZ = 60 / 20;
     
-        const wallHeight = 5;
+        wallTexture.repeat.set(repeatX, repeatZ);
+    
+        const wallHeight = 10;
         const wallThickness = 1;
         const floorSize = 60;
     
         // Parete sinistra
         const leftWallR1 = new THREE.Mesh(
             new THREE.BoxGeometry(wallThickness, wallHeight, floorSize),
-            wallMaterial
+            new THREE.MeshStandardMaterial({ map: wallTexture })
+
         );
         leftWallR1.position.set(-floorSize / 2, wallHeight / 2, 0);
         this.#scene.add(leftWallR1);
@@ -122,7 +206,7 @@ export class World {
         // Parete destra
         const rightWallR1 = new THREE.Mesh(
             new THREE.BoxGeometry(wallThickness, wallHeight, floorSize),
-            wallMaterial
+            new THREE.MeshStandardMaterial({ map: wallTexture })
         );
         rightWallR1.position.set(floorSize / 2, wallHeight / 2, 0);
         this.#scene.add(rightWallR1);
@@ -131,7 +215,7 @@ export class World {
         // Parete posteriore
         const backWallR1 = new THREE.Mesh(
             new THREE.BoxGeometry(floorSize, wallHeight, wallThickness),
-            wallMaterial
+            new THREE.MeshStandardMaterial({ map: wallTexture })
         );
         backWallR1.position.set(0, wallHeight / 2, -floorSize / 2);
         this.#scene.add(backWallR1);
@@ -140,7 +224,7 @@ export class World {
         // Parete frontale con fessura
         const frontWallLeftR1 = new THREE.Mesh(
             new THREE.BoxGeometry(floorSize, wallHeight, wallThickness), // Ridotto di "doorWidth" per fare spazio alla porta
-            wallMaterial
+            new THREE.MeshStandardMaterial({ map: wallTexture })
         );
         frontWallLeftR1.position.set(floorSize/2, wallHeight / 2, floorSize / 2);  // Posizionato alla metà del lato frontale
         this.#scene.add(frontWallLeftR1);
@@ -149,7 +233,7 @@ export class World {
            // Parete frontale con fessura
         const frontWallRightR1 = new THREE.Mesh(
             new THREE.BoxGeometry(floorSize, wallHeight, wallThickness), // Ridotto di "doorWidth" per fare spazio alla porta
-            wallMaterial    
+            new THREE.MeshStandardMaterial({ map: wallTexture })
         );
         frontWallRightR1.position.set(-floorSize/1.8, wallHeight / 2, floorSize / 2);  // Posizionato alla metà del lato frontale
         this.#scene.add(frontWallRightR1);

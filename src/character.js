@@ -40,7 +40,7 @@ export class Character {
         this.#loader.load('ninja_-_walking/scene.gltf', (gltf) => {
             this.#model = gltf.scene;
             this.#scene.add(this.#model);
-            this.#model.position.set(0, 0, 1);
+            this.#model.position.set(0, 0, 0);
 
             if (gltf.animations.length > 0) {
                 this.#animations = gltf.animations;
