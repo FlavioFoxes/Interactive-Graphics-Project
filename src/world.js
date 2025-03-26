@@ -1,5 +1,8 @@
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { Object } from './object';
+
 export class World {
     
     // Private attributes
@@ -11,8 +14,14 @@ export class World {
     #physicsWalls;
     #physicsFloor;
     #physicsWorld; 
-
+    #door;
+    #physicsDoor;
+    #doorAnimation;
+    #doorMixer;
+    #doorDimensions;
     #lights;
+    #objectsFirstRoom;
+    #isUniverse;
 
     constructor(scene) {
         this.#scene = scene;
@@ -21,6 +30,9 @@ export class World {
         this.#walls = [];
         this.#physicsWalls = [];
         this.#lights = [];
+        this.#doorDimensions = new THREE.Vector3();
+        this.#objectsFirstRoom = [];
+        this.#isUniverse = true;
         this.#Init();
     }
     
@@ -30,24 +42,69 @@ export class World {
         this.#AddFloor();   
         this.#AddWalls();
         this.#AddCeilings();
+        this.#AddDoor();
         this.#InitPhysics();
     }
-
+    
     #InitPhysics(){
         this.#physicsWorld = new CANNON.World();
         this.#physicsWorld.gravity.set(0, -9.81, 0);
-
+        
         this.#AddFloorsPhysics();
         this.#AddCeilingsPhysics();
         this.#AddWallsPhysics();
+        
+        
+        this.#AddObjectsFirstRoom();
     }
+
+    #AddDoor() {
+        const loader = new GLTFLoader();
+        loader.load('sci-fi_door/scene.gltf', (gltf) => {
+            this.#door = gltf.scene;
+            this.#scene.add(this.#door);
+            this.#door.position.set(0, -0.5, 29.5);
+            this.#door.scale.set(0.03, 0.03, 0.03);
+            // this.#door.scale.set(0.04, 0.04, 0.04);
+            // Calcola le dimensioni del modello direttamente da this.#door
+            this.#door.updateMatrixWorld(); // Assicurati che la matrice del mondo sia aggiornata
+            const box = new THREE.Box3().setFromObject(this.#door);
+            box.getSize(this.#doorDimensions);
+            this.#doorDimensions.z = 4;
+            this.#doorDimensions.x -= 14;
+            if (gltf.animations.length > 0) {
+                this.#doorAnimation = gltf.animations;
+                console.log("Animazioni trovate:", gltf.animations);
+            } else {
+                console.log("Nessuna animazione trovata.");
+            }
+
+            this.#doorMixer = new THREE.AnimationMixer(this.#door);
+            this.#AddDoorPhysics();
+
+        })
+    }
+
+    #AddDoorPhysics(){
+        const size = this.#doorDimensions; 
+
+        this.#physicsDoor = new CANNON.Body({
+            mass: 0.1, 
+            shape: new CANNON.Box(new CANNON.Vec3(size.x/2, size.y/2, size.z/2)), 
+            position: new CANNON.Vec3(this.#door.position.x, this.#door.position.y, this.#door.position.z), 
+        });
+        this.#physicsWorld.addBody(this.#physicsDoor);
+        // this.#physicsWorld.removeBody(this.#physicsDoor);
+        
+    }
+
     // Private method
     #AddLights() {
         const color = 0xffffff; //0xff0000;
         
         this.#ambientLight = new THREE.AmbientLight(color, 0.7); // Aumentata l'intensità
         this.#scene.add(this.#ambientLight);
-    
+        this.#lights.push(this.#ambientLight);
         const lightIntensity = 5; 
         const lightDistance = 30; 
         const decay = 1.5; 
@@ -226,7 +283,7 @@ export class World {
             new THREE.BoxGeometry(floorSize, wallHeight, wallThickness), // Ridotto di "doorWidth" per fare spazio alla porta
             new THREE.MeshStandardMaterial({ map: wallTexture })
         );
-        frontWallLeftR1.position.set(floorSize/2, wallHeight / 2, floorSize / 2);  // Posizionato alla metà del lato frontale
+        frontWallLeftR1.position.set(floorSize/1.8, wallHeight / 2, floorSize / 2);  // Posizionato alla metà del lato frontale
         this.#scene.add(frontWallLeftR1);
         this.#walls.push(frontWallLeftR1);
     
@@ -293,16 +350,74 @@ export class World {
             this.#physicsWalls.push(wallBody);
         }
     }
+
+    #AddObjectsFirstRoom() {
+        const generator_position = new THREE.Vector3(25, 0, 0);
+        const generator_scale = new THREE.Vector3(0.01, 0.01, 0.01);
+        const generator = new Object('sci-fi_power_generator_free/scene.gltf', 
+                                     true, this.#scene, this.#physicsWorld, generator_position, generator_scale);
+        this.#objectsFirstRoom.push(generator);
+    
+        const lowpoly_position = new THREE.Vector3(-25, 1.1, 10);
+        const lowpoly_scale = new THREE.Vector3(0.01,0.01,0.01);
+        const lowpoly = new Object('scifi_generator/scene.gltf', 
+                                     false, this.#scene, this.#physicsWorld, lowpoly_position, lowpoly_scale);
+        this.#objectsFirstRoom.push(lowpoly);
+    
+        // Si può aggiungere effetto lievitazione
+        const cube_position = new THREE.Vector3(-10, 1, 15);
+        const cube_scale = new THREE.Vector3(0.001, 0.001, 0.001);
+        const cube = new Object('generator3/scene.gltf', 
+                                    false, this.#scene, this.#physicsWorld, cube_position, cube_scale);
+        this.#objectsFirstRoom.push(cube);
+        
+
+        const plasma_position = new THREE.Vector3(-20, 1, -27);
+        const plasma_scale = new THREE.Vector3(0.001,0.001,0.001);
+        const plasma = new Object('plasma/scene.gltf', 
+                                    false, this.#scene, this.#physicsWorld, plasma_position, plasma_scale);
+        this.#objectsFirstRoom.push(plasma);
+    
+        const ring_position = new THREE.Vector3(-10, 1, -18);
+        const ring_scale = new THREE.Vector3(0.1,0.1,0.1);
+        const ring = new Object('ring/scene.gltf', 
+                                    true, this.#scene, this.#physicsWorld, ring_position, ring_scale);
+        this.#objectsFirstRoom.push(ring);
+    
+        const disk_position = new THREE.Vector3(16, 1, -10);
+        const disk_scale = new THREE.Vector3(0.002,0.002,0.002);
+        const disk = new Object('disk/scene.gltf', 
+                                    false, this.#scene, this.#physicsWorld, disk_position, disk_scale);
+        this.#objectsFirstRoom.push(disk);
+
+    }
+
+
     // Getter for ambient light
     get ambientLight(){
         return this.#ambientLight;
     }
 
+    get lights(){
+        return this.#lights;
+    }
     get walls() {
         return this.#walls;
     }
 
     get physicsWorld(){
         return this.#physicsWorld;
+    }
+
+    get isUniverse() {
+        return this.#isUniverse;
+    }
+
+    get objectsFirstRoom(){
+        return this.#objectsFirstRoom;
+    }
+
+    setUniverse(value){
+        this.#isUniverse = value;
     }
 }

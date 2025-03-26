@@ -1,0 +1,11 @@
+Model Information:
+* title:	Ninja - Walking
+* source:	https://sketchfab.com/3d-models/ninja-walking-0268036dde274e6ba9ded5bdf8a082c1
+* author:	Bugawuga (https://sketchfab.com/Bugawuga)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Ninja - Walking" (https://sketchfab.com/3d-models/ninja-walking-0268036dde274e6ba9ded5bdf8a082c1) by Bugawuga (https://sketchfab.com/Bugawuga) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

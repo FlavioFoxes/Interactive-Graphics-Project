@@ -3,7 +3,6 @@ import * as CANNON from 'cannon-es';
 
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-
 export class Controller {
 
     // Private attributes
@@ -16,8 +15,10 @@ export class Controller {
     #moveLeft;
     #moveRight;
     #moveSpeed;
+    #gameMessage;
+    #isCommandsMessageShown;
 
-    constructor(camera, character, renderer, world){
+    constructor(camera, character, renderer, world, gameMessage){
         this.#camera = camera;
         this.#character = character;
         this.#world = world;
@@ -28,6 +29,8 @@ export class Controller {
         this.#controls.enablePan = false;
         this.#controls.enableDamping = true;
         this.#controls.autoRotate = true;
+        this.#gameMessage = gameMessage;
+        this.#isCommandsMessageShown = false;
         this.#Init();
     } 
 
@@ -46,6 +49,25 @@ export class Controller {
             if (event.key === 's') this.#moveBackward = true;
             if (event.key === 'a') this.#moveLeft = true;
             if (event.key === 'd') this.#moveRight = true;
+            if (event.key === 'u') {
+                this.#world.setUniverse(!this.#world.isUniverse);
+                if(!this.#isCommandsMessageShown){
+                    this.#gameMessage.showMessage("Commands");
+                    this.#isCommandsMessageShown = true;
+                }
+                if(this.#world.isUniverse){
+                    this.UpdateSwitchToUniverse();
+                }
+                else{
+                    this.UpdateSwitchToXenoverse();
+                }
+                console.warn("is universe:   ", this.#world.isUniverse);
+
+                for(const obj of this.#world.objectsFirstRoom){
+                    obj.setIsVisible(!obj.isVisible);
+                }
+
+            }
         });
 
         document.addEventListener('keyup', (event) => {
@@ -160,4 +182,16 @@ export class Controller {
         }
     }
 
+    UpdateSwitchToUniverse(){
+        for(const light of this.#world.lights){
+            light.color.set(0xffffff);
+        }
+    }
+
+
+    UpdateSwitchToXenoverse(){
+        for(const light of this.#world.lights){
+            light.color.set(0xff0000);
+        }
+    }
 }
