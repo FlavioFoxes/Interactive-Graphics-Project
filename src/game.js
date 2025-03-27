@@ -39,9 +39,14 @@ export class Game {
             if (character.mixer) {
             character.mixer.update(0.01); 
             }
+
+            if(world.doorMixer){
+                world.doorMixer.update(0.01);
+            }
             controller.UpdateCharacterPosition();
             controller.UpdateCameraPosition();
             controller.UpdateCharacterAnimation();
+            controller.UpdateInteractionWithObjects();
             renderer.render(scene, camera.perspectiveCamera); 
         }
         

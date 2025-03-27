@@ -10,7 +10,7 @@ export class Character {
     #animations;
     #world;
     #physicsBody;
-
+    #numObjectsCollected;
     constructor(scene, world) {
         this.#scene = scene;
         this.#world = world;
@@ -23,7 +23,7 @@ export class Character {
         this.#mixer = null;
         this.#animations = [];
         this.#LoadModel();
-        
+        this.#numObjectsCollected = 0;
     }
 
     #InitPhysics(){
@@ -79,4 +79,13 @@ export class Character {
     get physicsBody() {
         return this.#physicsBody;
     }
+
+    get numObjectsCollected(){
+        return this.#numObjectsCollected;
+    }
+
+    incrementObjectsCollected(){
+        this.#numObjectsCollected += 1;
+    }
+
 }

@@ -121,29 +121,85 @@ export class GameStart {
 
 export class GameMessage {
     constructor() {
-        this._messageBox = document.createElement('div');
-        this._messageBox.style.position = 'absolute';
-        this._messageBox.style.left = '50%';
-        this._messageBox.style.top = '20%';
-        this._messageBox.style.transform = 'translate(-50%, -50%)';
-        this._messageBox.style.color = 'white';
-        this._messageBox.style.fontSize = '24px';
-        this._messageBox.style.fontFamily = 'Arial, sans-serif';
-        this._messageBox.style.textAlign = 'center';
-        this._messageBox.style.padding = '15px';
-        this._messageBox.style.minWidth = '200px';
-        this._messageBox.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-        this._messageBox.style.border = '2px solid rgba(255, 255, 255, 0.5)';
-        this._messageBox.style.borderRadius = '8px';
-        this._messageBox.style.display = 'none';
-        this._messageBox.style.zIndex = '1000';
+        this._messageCommandBox = document.createElement('div');
+        this._messageCommandBox.style.position = 'absolute';
+        this._messageCommandBox.style.left = '50%';
+        this._messageCommandBox.style.top = '20%';
+        this._messageCommandBox.style.transform = 'translate(-50%, -50%)';
+        this._messageCommandBox.style.color = 'white';
+        this._messageCommandBox.style.fontSize = '24px';
+        this._messageCommandBox.style.fontFamily = 'Arial, sans-serif';
+        this._messageCommandBox.style.textAlign = 'center';
+        this._messageCommandBox.style.padding = '15px';
+        this._messageCommandBox.style.minWidth = '200px';
+        this._messageCommandBox.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+        this._messageCommandBox.style.border = '2px solid rgba(255, 255, 255, 0.5)';
+        this._messageCommandBox.style.borderRadius = '8px';
+        this._messageCommandBox.style.display = 'none';
+        this._messageCommandBox.style.zIndex = '1000';
 
-        document.body.appendChild(this._messageBox);
+        this._messageObjectsBox = document.createElement('div');
+        this._messageObjectsBox.style.position = 'absolute';
+        this._messageObjectsBox.style.left = '50%';
+        this._messageObjectsBox.style.top = '20%';
+        this._messageObjectsBox.style.transform = 'translate(-50%, -50%)';
+        this._messageObjectsBox.style.color = 'white';
+        this._messageObjectsBox.style.fontSize = '24px';
+        this._messageObjectsBox.style.fontFamily = 'Arial, sans-serif';
+        this._messageObjectsBox.style.textAlign = 'center';
+        this._messageObjectsBox.style.padding = '15px';
+        this._messageObjectsBox.style.minWidth = '200px';
+        this._messageObjectsBox.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+        this._messageObjectsBox.style.border = '2px solid rgba(255, 255, 255, 0.5)';
+        this._messageObjectsBox.style.borderRadius = '8px';
+        this._messageObjectsBox.style.display = 'none';
+        this._messageObjectsBox.style.zIndex = '1000';
+
+        this._messageCollectedBox = document.createElement('div');
+        this._messageCollectedBox.style.position = 'absolute';
+        this._messageCollectedBox.style.left = '50%';
+        this._messageCollectedBox.style.top = '20%';
+        this._messageCollectedBox.style.transform = 'translate(-50%, -50%)';
+        this._messageCollectedBox.style.color = 'white';
+        this._messageCollectedBox.style.fontSize = '24px';
+        this._messageCollectedBox.style.fontFamily = 'Arial, sans-serif';
+        this._messageCollectedBox.style.textAlign = 'center';
+        this._messageCollectedBox.style.padding = '15px';
+        this._messageCollectedBox.style.minWidth = '200px';
+        this._messageCollectedBox.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+        this._messageCollectedBox.style.border = '2px solid rgba(255, 255, 255, 0.5)';
+        this._messageCollectedBox.style.borderRadius = '8px';
+        this._messageCollectedBox.style.display = 'none';
+        this._messageCollectedBox.style.zIndex = '1000';
+
+        this._messageUsableBox = document.createElement('div');
+        this._messageUsableBox.style.position = 'absolute';
+        this._messageUsableBox.style.left = '50%';
+        this._messageUsableBox.style.top = '20%';
+        this._messageUsableBox.style.transform = 'translate(-50%, -50%)';
+        this._messageUsableBox.style.color = 'white';
+        this._messageUsableBox.style.fontSize = '24px';
+        this._messageUsableBox.style.fontFamily = 'Arial, sans-serif';
+        this._messageUsableBox.style.textAlign = 'center';
+        this._messageUsableBox.style.padding = '15px';
+        this._messageUsableBox.style.minWidth = '200px';
+        this._messageUsableBox.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+        this._messageUsableBox.style.border = '2px solid rgba(255, 255, 255, 0.5)';
+        this._messageUsableBox.style.borderRadius = '8px';
+        this._messageUsableBox.style.display = 'none';
+        this._messageUsableBox.style.zIndex = '1000';
+
+        document.body.appendChild(this._messageCommandBox);
+        document.body.appendChild(this._messageObjectsBox);
+        document.body.appendChild(this._messageCollectedBox);
+        document.body.appendChild(this._messageUsableBox);
+
+        this._timeoutId = null;
     }
 
-    showMessage(text) {
-        this._messageBox.innerHTML = `<p>${text}</p>`;
-    
+    showCommandMessage(text) {
+        this._messageCommandBox.innerHTML = `<p>${text}</p>`;
+        
         // Creazione del pulsante "Continua"
         const button = document.createElement('button');
         button.innerText = "Continua";
@@ -155,18 +211,58 @@ export class GameMessage {
         button.style.backgroundColor = "rgba(255, 255, 255, 0.2)";
         button.style.color = "white";
         button.style.borderRadius = "5px";
-    
+        
         button.onmouseover = () => button.style.backgroundColor = "rgba(255, 255, 255, 0.4)";
         button.onmouseout = () => button.style.backgroundColor = "rgba(255, 255, 255, 0.2)";
         
         button.onclick = () => {
-            this._messageBox.style.display = 'none';
+            this._messageCommandBox.style.display = 'none';
         };
-    
-        this._messageBox.appendChild(button);
-        this._messageBox.style.display = 'block';
+        
+        this._messageCommandBox.appendChild(button);
+        this._messageCommandBox.style.display = 'block';
     }
-    
+    showObjectMessage(text) {
+        this._messageObjectsBox.innerHTML = `<p>${text}</p>`;
+        this._messageObjectsBox.style.display = 'block';
+    }
+    hideObjectsMessage() {
+        this._messageObjectsBox.style.display = 'none';
+    }
+    showCollectedMessage(text) {
+        this._messageCollectedBox.innerHTML = `<p>${text}</p>`;
+        this._messageCollectedBox.style.display = 'block';
+
+        // Se un timeout è già attivo, lo cancella
+        if (this._timeoutId) {
+            clearTimeout(this._timeoutId);
+        }
+
+        // Dopo 3 secondi il messaggio scompare automaticamente
+        this._timeoutId = setTimeout(() => {
+            this.hideCollectedMessage();
+        }, 3000);
+    }
+    hideCollectedMessage() {
+        this._messageCollectedBox.style.display = 'none';
+    }
+    showUsableMessage(text) {
+        this._messageUsableBox.innerHTML = `<p>${text}</p>`;
+        this._messageUsableBox.style.display = 'block';
+
+        // Se un timeout è già attivo, lo cancella
+        if (this._timeoutId) {
+            clearTimeout(this._timeoutId);
+        }
+
+        // Dopo 3 secondi il messaggio scompare automaticamente
+        this._timeoutId = setTimeout(() => {
+            this.hideUsableMessage();
+        }, 3000);
+    }
+    hideUsableMessage() {
+        this._messageUsableBox.style.display = 'none';
+    }
 }
 
 // export class GUI {

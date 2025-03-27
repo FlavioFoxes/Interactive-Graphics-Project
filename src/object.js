@@ -6,14 +6,18 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 export class Object{
     #loader;
     #isVisibile;
+    #isCollectable;
+    #isUsable;
     #path;
     #model;
     #scene;
     #physicsWorld;
     #physicsBody;
-    constructor(path, isVisible, scene, physicsWorld, position, scale){
+    constructor(path, isVisible, isCollectable, isUsable, scene, physicsWorld, position, scale){
         this.#path = path;
         this.#isVisibile = isVisible;
+        this.#isCollectable = isCollectable;
+        this.#isUsable = isUsable;
         this.#scene = scene;
         this.#physicsWorld = physicsWorld;
         this.#LoadModel(position, scale);
@@ -46,6 +50,18 @@ export class Object{
         return this.#isVisibile;
     }
 
+    get isUsable(){
+        return this.#isUsable;
+    }
+
+    get isCollectable(){
+        return this.#isCollectable;
+    }
+
+    get model(){
+        return this.#model;
+    }
+    
     setIsVisible(value){
         this.#model.visible = value;
         this.#isVisibile = value;
