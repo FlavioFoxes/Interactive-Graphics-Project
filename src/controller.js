@@ -30,7 +30,7 @@ export class Controller {
         this.#camera = camera;
         this.#character = character;
         this.#world = world;
-        this.#moveSpeed = 0.3;
+        this.#moveSpeed = 0.1;
         this.#controls = new OrbitControls(this.#camera.perspectiveCamera, renderer.domElement);
         this.#controls.target.set(0, 0.5, 0);
         this.#controls.update();
@@ -56,8 +56,8 @@ export class Controller {
 
     // Private method for listener of WASD buttons
     #AddWASDListener() {
-        this.#world.setDoorCanBeOpened(true);
-        this.#character.enableTelekinetic();
+        // this.#world.setDoorCanBeOpened(true);
+        // this.#character.enableTelekinetic();
 
         document.addEventListener('keydown', (event) => {
             if (event.key === 'w') this.#moveForward = true;
@@ -102,18 +102,19 @@ export class Controller {
                                     this.#gameMessage.showUsableMessage("You haven't collected all the necessary objects to use the machinery");
                                 }
                                 else{
-                                    this.#gameMessage.showUsableMessage("You collected all the objects! This telekinetics gun is for you");
+                                    this.#gameMessage.showUsableMessage("You collected all the objects! This telekinetics gun is for you. You can now proceed over the door");
                                     this.#world.AddTelekineticsGun();
                                     this.#world.setDoorCanBeOpened(true);
                                     this.#character.enableTelekinetic();
                                     this.#world.CreateUniverseMaze();
                                     this.#world.CreateXenoverseMaze();
-                                    if(this.#world.isUniverse){
-                                        this.#world.mazeXenoverse.DeactivateMaze();
-                                    }
-                                    else{
-                                        this.#world.mazeUniverse.DeactivateMaze();
-                                    }                                    
+                                    console.warn("MAZE CREATO");
+                                    // if(this.#world.isUniverse){
+                                    //     this.#world.mazeXenoverse.DeactivateMaze();
+                                    // }
+                                    // else{
+                                    //     this.#world.mazeUniverse.DeactivateMaze();
+                                    // }                                    
                                 }
                                 this.#gameMessage.hideObjectsMessage();
 
@@ -168,8 +169,10 @@ export class Controller {
             if (event.key === 'g'){
                 if(this.#character.enabledTelekinetic){
                     
-                    this.#heldObject.enablePhysics();
-                    this.#heldObject.model.position.copy(this.#heldObject.physicsBody.position);
+                    if(this.#heldObject){
+                        this.#heldObject.enablePhysics();
+                        this.#heldObject.model.position.copy(this.#heldObject.physicsBody.position);
+                    }
                     this.#heldObject = null;
                     this.#holding = false;
                 }
@@ -192,9 +195,7 @@ export class Controller {
                 minDistance = this.#character.model.position.distanceTo(obj.model.position);
             }
         }
-
-        return closestObject
-    
+        return closestObject;
     }
     
     // Getter for forward motion
@@ -313,8 +314,11 @@ export class Controller {
             obj.setIsVisible(false);
         }
 
-        this.#world.mazeUniverse.ActivateMaze();
-        this.#world.mazeXenoverse.DeactivateMaze();
+        if(this.#world.doorCanBeOpened){
+            this.#world.mazeUniverse.ActivateMaze();
+            this.#world.mazeXenoverse.DeactivateMaze();
+
+        }
 
     }
 
@@ -330,8 +334,10 @@ export class Controller {
             obj.setIsVisible(true);
         }
 
-        this.#world.mazeUniverse.DeactivateMaze();
-        this.#world.mazeXenoverse.ActivateMaze();
+        if(this.#world.doorCanBeOpened){
+            this.#world.mazeUniverse.DeactivateMaze();
+            this.#world.mazeXenoverse.ActivateMaze();
+        }
     }
 
     UpdateInteractionWithObjects(){
