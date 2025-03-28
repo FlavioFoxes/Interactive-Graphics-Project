@@ -3,6 +3,7 @@ import * as CANNON from 'cannon-es';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { Object } from './object';
 import { Sphere } from './sphere';
+import { MazeUniverse, MazeXenoverse } from './maze'
 
 export class World {
     
@@ -25,6 +26,8 @@ export class World {
     #objectsInXenoverse;
     #isUniverse;
     #doorCanBeOpened;
+    #mazeUniverse;
+    #mazeXenoverse;
 
     constructor(scene) {
         this.#scene = scene;
@@ -49,6 +52,10 @@ export class World {
         this.#AddCeilings();
         this.#AddDoor();
         this.#InitPhysics();
+
+        // this.#CreateUniverseMaze();
+        // this.#CreateXenoverseMaze();
+        // this.#mazeXenoverse.DeactivateMaze();
 
     }
     
@@ -139,8 +146,8 @@ export class World {
         floor1Texture.wrapS = THREE.RepeatWrapping;
         floor1Texture.wrapT = THREE.RepeatWrapping;
     
-        const repeatX = 60 / 5;
-        const repeatZ = 60 / 5;
+        const repeatX = 100 / 5;
+        const repeatZ = 100 / 5;
     
         floor1Texture.repeat.set(repeatX, repeatZ);
     
@@ -155,7 +162,7 @@ export class World {
         this.#scene.add(floor1);
 
         // floor 2
-        const floor2Texture = textureLoader.load("metal-panel.avif"); 
+        const floor2Texture = textureLoader.load("textures/terreno.jpg"); 
     
         floor2Texture.wrapS = THREE.RepeatWrapping;
         floor2Texture.wrapT = THREE.RepeatWrapping;
@@ -302,10 +309,17 @@ export class World {
         this.#walls.push(frontWallRightR1);
 
         ///////////////////////////////////////////////
+        const wall2Texture = textureLoader.load("textures/muro.jpg"); 
+        wall2Texture.wrapS = THREE.RepeatWrapping;
+        wall2Texture.wrapT = THREE.RepeatWrapping;
+        const repeat2X = 120 / 20; 
+        const repeat2Z = 40 / 20;
+        wall2Texture.repeat.set(repeat2X, repeat2Z);
+
         // Parete sinistra
         const leftWallR2 = new THREE.Mesh(
             new THREE.BoxGeometry(wallThickness, wallHeight, floorSize),
-            wallMaterial
+            new THREE.MeshStandardMaterial({ map: wall2Texture })
         );
         leftWallR2.position.set(-floorSize / 2, wallHeight / 2, floorSize);
         this.#scene.add(leftWallR2);
@@ -314,7 +328,7 @@ export class World {
         // Parete destra
         const rightWallR2 = new THREE.Mesh(
             new THREE.BoxGeometry(wallThickness, wallHeight, floorSize),
-            wallMaterial
+            new THREE.MeshStandardMaterial({ map: wall2Texture })
         );
         rightWallR2.position.set(floorSize / 2, wallHeight / 2, floorSize);
         this.#scene.add(rightWallR2);
@@ -323,7 +337,7 @@ export class World {
         // Parete frontale con fessura
         const frontWallLeftR2 = new THREE.Mesh(
             new THREE.BoxGeometry(floorSize/2, wallHeight, wallThickness), // Ridotto di "doorWidth" per fare spazio alla porta
-            wallMaterial
+            new THREE.MeshStandardMaterial({ map: wall2Texture })
         );
         frontWallLeftR2.position.set(floorSize/3.5, wallHeight / 2, floorSize*1.5);  // Posizionato alla metà del lato frontale
         this.#scene.add(frontWallLeftR2);
@@ -332,7 +346,7 @@ export class World {
             // Parete frontale con fessura
         const frontWallRightR2 = new THREE.Mesh(
             new THREE.BoxGeometry(floorSize/2, wallHeight, wallThickness), // Ridotto di "doorWidth" per fare spazio alla porta
-            wallMaterial    
+            new THREE.MeshStandardMaterial({ map: wall2Texture })    
         );
         frontWallRightR2.position.set(-floorSize/3.5, wallHeight / 2, floorSize*1.5);  // Posizionato alla metà del lato frontale
         this.#scene.add(frontWallRightR2);
@@ -472,4 +486,21 @@ export class World {
         this.#objectsInUniverse.push(gun);
     
     }
+
+    CreateUniverseMaze(){
+        this.#mazeUniverse = new MazeUniverse(this.#scene, this.#physicsWorld);
+    }
+
+    get mazeUniverse(){
+        return this.#mazeUniverse;
+    }
+
+    CreateXenoverseMaze(){
+        this.#mazeXenoverse = new MazeXenoverse(this.#scene, this.#physicsWorld);
+    }
+    get mazeXenoverse(){
+        return this.#mazeXenoverse;
+    }
+
+
 }

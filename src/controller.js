@@ -3,6 +3,7 @@ import * as CANNON from 'cannon-es';
 
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GameMessage } from './gui';
+import { MazeUniverse } from './maze'
 
 export class Controller {
 
@@ -105,6 +106,14 @@ export class Controller {
                                     this.#world.AddTelekineticsGun();
                                     this.#world.setDoorCanBeOpened(true);
                                     this.#character.enableTelekinetic();
+                                    this.#world.CreateUniverseMaze();
+                                    this.#world.CreateXenoverseMaze();
+                                    if(this.#world.isUniverse){
+                                        this.#world.mazeXenoverse.DeactivateMaze();
+                                    }
+                                    else{
+                                        this.#world.mazeUniverse.DeactivateMaze();
+                                    }                                    
                                 }
                                 this.#gameMessage.hideObjectsMessage();
 
@@ -138,8 +147,6 @@ export class Controller {
             }
             if(event.key === 'g'){
                 if(this.#character.enabledTelekinetic && !this.#holding){
-                    console.warn("STO QUAAA:        ", this.#character.enabledTelekinetic);
-                    // TODO: Implement telekinetic
                     const closestObject = this.findClosestObject();
                     if(closestObject){
                         this.#heldObject = closestObject;
@@ -306,6 +313,9 @@ export class Controller {
             obj.setIsVisible(false);
         }
 
+        this.#world.mazeUniverse.ActivateMaze();
+        this.#world.mazeXenoverse.DeactivateMaze();
+
     }
 
 
@@ -319,6 +329,9 @@ export class Controller {
         for(const obj of this.#world.objectsInXenoverse){
             obj.setIsVisible(true);
         }
+
+        this.#world.mazeUniverse.DeactivateMaze();
+        this.#world.mazeXenoverse.ActivateMaze();
     }
 
     UpdateInteractionWithObjects(){
