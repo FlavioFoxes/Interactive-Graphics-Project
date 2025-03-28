@@ -23,7 +23,8 @@ export class MazeUniverse{
         this.#lights_model = [];
         this.#CreateWalls();
         // this.#AddWallsPhysics();
-        this.#AddLights();
+        this.#AddLights();  
+        this.DeactivateMaze();
     }
 
     #CreateWalls(){
