@@ -11,6 +11,7 @@ export class Character {
     #world;
     #physicsBody;
     #numObjectsCollected;
+    #enabledTelekinetic;
     constructor(scene, world) {
         this.#scene = scene;
         this.#world = world;
@@ -24,6 +25,7 @@ export class Character {
         this.#animations = [];
         this.#LoadModel();
         this.#numObjectsCollected = 0;
+        this.#enabledTelekinetic = false;
     }
 
     #InitPhysics(){
@@ -84,8 +86,15 @@ export class Character {
         return this.#numObjectsCollected;
     }
 
+    get enabledTelekinetic(){
+        return this.#enabledTelekinetic;
+    }
+
     incrementObjectsCollected(){
         this.#numObjectsCollected += 1;
     }
 
+    enableTelekinetic(){
+        this.#enabledTelekinetic = true;
+    }
 }

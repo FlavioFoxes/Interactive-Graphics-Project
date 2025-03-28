@@ -29,7 +29,7 @@ export class Game {
         document.body.appendChild(renderer.domElement);
         
         // Create Controller to play
-        const controller = new Controller(camera, character, renderer, world, gameMessage);
+        const controller = new Controller(camera, character, renderer, world, gameMessage, scene);
         
         const cannonDebugger = new CannonDebugger(scene, world.physicsWorld, {});
         // Maybe this can be moved somewhere else (maybe in world.js?)
@@ -47,6 +47,7 @@ export class Game {
             controller.UpdateCameraPosition();
             controller.UpdateCharacterAnimation();
             controller.UpdateInteractionWithObjects();
+            controller.UpdateTelekineticManagement();
             renderer.render(scene, camera.perspectiveCamera); 
         }
         

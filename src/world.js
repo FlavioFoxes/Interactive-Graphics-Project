@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { Object } from './object';
+import { Sphere } from './sphere';
 
 export class World {
     
@@ -48,6 +49,7 @@ export class World {
         this.#AddCeilings();
         this.#AddDoor();
         this.#InitPhysics();
+
     }
     
     #InitPhysics(){
@@ -355,13 +357,13 @@ export class World {
     }
 
     #AddObjectsFirstRoom() {
-        const generator_position = new THREE.Vector3(25, 0, 0);
+        const generator_position = new THREE.Vector3(25, 1, 0);
         const generator_scale = new THREE.Vector3(0.01, 0.01, 0.01);
         const generator = new Object('sci-fi_power_generator_free/scene.gltf', 
                                      true, false, false, this.#scene, this.#physicsWorld, generator_position, generator_scale);
         this.#objectsInUniverse.push(generator);
     
-        const lowpoly_position = new THREE.Vector3(-25, 1.1, 10);
+        const lowpoly_position = new THREE.Vector3(-25, 1, 10);
         const lowpoly_scale = new THREE.Vector3(0.01,0.01,0.01);
         const lowpoly = new Object('scifi_generator/scene.gltf', 
                                      false, false, true, this.#scene, this.#physicsWorld, lowpoly_position, lowpoly_scale);
@@ -393,6 +395,12 @@ export class World {
                                     false, true, false, this.#scene, this.#physicsWorld, disk_position, disk_scale);
         this.#objectsInXenoverse.push(disk);
 
+        // TODO
+        // La sfera viene creata correttamente. Controlla nella classe se tutti gli attributi sono necessari.
+        // Crea altre sfere
+        const sphere_position = new THREE.Vector3(10, 1, 10);
+        const sphere_scale = new THREE.Vector3(1,1,1);
+        const sphere = new Sphere("x.avif", true, false, false, this.#scene, this.#physicsWorld, sphere_position, sphere_scale);    
     }
 
 

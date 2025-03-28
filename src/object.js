@@ -36,7 +36,7 @@ export class Object{
             const size = boundingBox.getSize(new THREE.Vector3()); 
 
             this.#physicsBody = new CANNON.Body({
-                mass: 0, 
+                mass: 10, 
                 shape: new CANNON.Box(new CANNON.Vec3(size.x/2, size.y, size.z/2)), 
                 position: new CANNON.Vec3(this.#model.position.x, this.#model.position.y, this.#model.position.z), 
             });
@@ -60,6 +60,18 @@ export class Object{
 
     get model(){
         return this.#model;
+    }
+
+    get physicsBody(){
+        return this.#physicsBody;
+    }
+
+    disablePhysics(){
+        this.#physicsWorld.removeBody(this.#physicsBody);
+    }
+
+    enablePhysics(){
+        this.#physicsWorld.addBody(this.#physicsBody);
     }
     
     setIsVisible(value){

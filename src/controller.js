@@ -11,6 +11,7 @@ export class Controller {
     #character;
     #controls;
     #world;
+    #scene;
     #moveForward;
     #moveBackward;
     #moveLeft;
@@ -19,8 +20,12 @@ export class Controller {
     #gameMessage;
     #isCommandsMessageShown;
     #distanceThreshold;
+    #holding;
+    #heldObject;
+    #elapsedTime;
 
-    constructor(camera, character, renderer, world, gameMessage){
+    constructor(camera, character, renderer, world, gameMessage, scene){
+        this.#scene = scene;
         this.#camera = camera;
         this.#character = character;
         this.#world = world;
@@ -34,6 +39,9 @@ export class Controller {
         this.#gameMessage = gameMessage;
         this.#isCommandsMessageShown = false;
         this.#distanceThreshold = 3;
+        this.#holding = false;
+        this.#heldObject = null;
+        this.#elapsedTime = 0;
         this.#Init();
     } 
 
@@ -48,6 +56,7 @@ export class Controller {
     // Private method for listener of WASD buttons
     #AddWASDListener() {
         this.#world.setDoorCanBeOpened(true);
+        this.#character.enableTelekinetic();
 
         document.addEventListener('keydown', (event) => {
             if (event.key === 'w') this.#moveForward = true;
@@ -95,6 +104,7 @@ export class Controller {
                                     this.#gameMessage.showUsableMessage("You collected all the objects! This telekinetics gun is for you");
                                     this.#world.AddTelekineticsGun();
                                     this.#world.setDoorCanBeOpened(true);
+                                    this.#character.enableTelekinetic();
                                 }
                                 this.#gameMessage.hideObjectsMessage();
 
@@ -126,6 +136,20 @@ export class Controller {
                     
                 }
             }
+            if(event.key === 'g'){
+                if(this.#character.enabledTelekinetic && !this.#holding){
+                    console.warn("STO QUAAA:        ", this.#character.enabledTelekinetic);
+                    // TODO: Implement telekinetic
+                    const closestObject = this.findClosestObject();
+                    if(closestObject){
+                        this.#heldObject = closestObject;
+                        this.#holding= true;
+                        this.#heldObject.disablePhysics();
+                    }
+
+
+                }
+            }
             
         });
 
@@ -134,7 +158,36 @@ export class Controller {
             if (event.key === 's') this.#moveBackward = false;
             if (event.key === 'a') this.#moveLeft = false;
             if (event.key === 'd') this.#moveRight = false;
+            if (event.key === 'g'){
+                if(this.#character.enabledTelekinetic){
+                    
+                    this.#heldObject.enablePhysics();
+                    this.#heldObject.model.position.copy(this.#heldObject.physicsBody.position);
+                    this.#heldObject = null;
+                    this.#holding = false;
+                }
+            } 
         });
+    }
+    
+
+    findClosestObject() {
+        // const raycaster = new THREE.Raycaster();
+        // const direction = new THREE.Vector3(0,0,1);
+        // raycaster.set(this.#character.position, direction);
+        // const intersects = raycaster.intersectObjects(this.#scene.children, true);
+        // return intersects.length > 0 ? intersects[0].object : null;
+        let closestObject = null;
+        let minDistance = 10;
+        for(const obj of this.#world.objectsInUniverse){
+            if(this.#character.model.position.distanceTo(obj.model.position) < minDistance){
+                closestObject = obj;
+                minDistance = this.#character.model.position.distanceTo(obj.model.position);
+            }
+        }
+
+        return closestObject
+    
     }
     
     // Getter for forward motion
@@ -296,6 +349,47 @@ export class Controller {
         }
     
     }   
+
+    UpdateTelekineticManagement(){
+        if(this.#holding && this.#heldObject){
+            const targetPosition = new THREE.Vector3(0,1,2);
+            // Convert euler angle of rotation in quaternion
+            const quaternion = new THREE.Quaternion();
+            this.#character.model.getWorldQuaternion(quaternion);
+            targetPosition.applyQuaternion(quaternion);
+            targetPosition.add(this.#character.model.position);
+
+            // Interpolazione fluida tra posizione attuale e target
+            const smoothFactor = 0.1; // Velocità di avvicinamento, più basso = più lento
+            const tolerance = 0.1;
+            if(this.#heldObject.model.position.distanceTo(targetPosition) > tolerance){
+                this.#heldObject.model.position.lerp(targetPosition, smoothFactor);
+            }
+            else{
+                this.LevitationAnimation(this.#heldObject, performance.now());
+            }
+            this.#heldObject.physicsBody.position.copy(this.#heldObject.model.position);
+
+        }
+    }
+
+    LevitationAnimation(obj, time){
+        const amplitude = 0.5;
+        const frequency = 1; // 1 ciclo al secondo
+        const currentTime = performance.now() / 1000;
+        const delta = (Math.sin(currentTime * Math.PI * 2 * frequency) + 1) / 2; // Normalizza tra 0 e 1
+
+        const minY = obj.model.position.y - amplitude;
+        const maxY = obj.model.position.y + amplitude;
+
+        const targetPosition = new THREE.Vector3(
+        obj.model.position.x,
+        THREE.MathUtils.lerp(minY, maxY, delta), // Interpola tra minY e maxY
+        obj.model.position.z
+        );
+
+        obj.model.position.lerp(targetPosition, 0.01); // Interpolazione fluida
+    }
 
     #CollectObject(obj){
         this.#character.incrementObjectsCollected();
