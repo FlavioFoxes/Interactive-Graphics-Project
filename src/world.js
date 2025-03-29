@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
+import { CSG } from 'three-csg-ts';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { Object } from './object';
 import { Sphere } from './sphere';
@@ -22,12 +23,17 @@ export class World {
     #doorMixer;
     #doorDimensions;
     #lights;
+    #cube1;
+    #cube2;
     #objectsInUniverse;
     #objectsInXenoverse;
     #isUniverse;
     #doorCanBeOpened;
     #mazeUniverse;
     #mazeXenoverse;
+
+    #sphere1;
+    #sphere2;
 
     constructor(scene) {
         this.#scene = scene;
@@ -52,10 +58,8 @@ export class World {
         this.#AddCeilings();
         this.#AddDoor();
         this.#InitPhysics();
-
-        // this.#CreateUniverseMaze();
-        // this.#CreateXenoverseMaze();
-        // this.#mazeXenoverse.DeactivateMaze();
+        this.#AddCubes();
+        this.#AddSpheres();
 
     }
     
@@ -70,6 +74,41 @@ export class World {
         
         this.#AddObjectsFirstRoom();
     }
+
+    #AddCubes(){
+        // Creazione dei cubi
+        const cubeGeometry = new THREE.BoxGeometry(1.7, 1.7, 1.7);
+        const cubeMaterial = new THREE.MeshStandardMaterial({ color: 0xaaaaaa });
+        const cube1 = new THREE.Mesh(cubeGeometry, cubeMaterial);
+        const cube2 = new THREE.Mesh(cubeGeometry, cubeMaterial);
+        cube1.position.set(10, 1, 88);
+        cube2.position.set(-10, 1, 88);
+        
+        const sphereGeometry = new THREE.SphereGeometry(1, 32, 32);
+        const sphere = new THREE.Mesh(sphereGeometry);
+        sphere.position.copy(cube1.position);
+
+        this.#cube1 = CSG.subtract(cube1, sphere);
+        this.#cube1.position.copy(cube1.position);
+        this.#cube2 = CSG.subtract(cube2, sphere);
+        this.#cube2.position.copy(cube2.position);
+
+        this.#scene.add(this.#cube1);
+        this.#scene.add(this.#cube2);
+    }
+
+    #AddSpheres() {
+        const sphere1_position = new THREE.Vector3(10, 1, 10);
+        this.#sphere1 = new Sphere("textures/Texture_4k/DefaultMaterial_Emissive.png", true, false, false, this.#scene, this.#physicsWorld, sphere1_position);    
+        this.#objectsInUniverse.push(this.#sphere1);
+        // this.#objectsInXenoverse.push(this.#sphere1);
+
+        const sphere2_position = new THREE.Vector3(-10, 1, 19);
+        this.#sphere2 = new Sphere("textures/Texture_4k/DefaultMaterial_Metallic.png", false, false, false, this.#scene, this.#physicsWorld, sphere2_position);    
+        // this.#objectsInUniverse.push(this.#sphere2);
+        this.#objectsInXenoverse.push(this.#sphere2);
+    }
+    
 
     #AddDoor() {
         const loader = new GLTFLoader();
@@ -271,6 +310,7 @@ export class World {
         leftWallR1.position.set(-floorSize / 2, wallHeight / 2, 0);
         this.#scene.add(leftWallR1);
         this.#walls.push(leftWallR1);
+
     
         // Parete destra
         const rightWallR1 = new THREE.Mesh(
@@ -351,6 +391,7 @@ export class World {
         frontWallRightR2.position.set(-floorSize/3.5, wallHeight / 2, floorSize*1.5);  // Posizionato alla metà del lato frontale
         this.#scene.add(frontWallRightR2);
         this.#walls.push(frontWallRightR2);
+
         
     }
     
@@ -387,7 +428,7 @@ export class World {
         const cube_position = new THREE.Vector3(-10, 1, 15);
         const cube_scale = new THREE.Vector3(0.001, 0.001, 0.001);
         const cube = new Object('generator3/scene.gltf', 
-                                    false, true, false, this.#scene, this.#physicsWorld, cube_position, cube_scale);
+                                    true, true, false, this.#scene, this.#physicsWorld, cube_position, cube_scale);
         this.#objectsInUniverse.push(cube);
         
 
@@ -409,14 +450,22 @@ export class World {
                                     false, true, false, this.#scene, this.#physicsWorld, disk_position, disk_scale);
         this.#objectsInXenoverse.push(disk);
 
-        // TODO
-        // La sfera viene creata correttamente. Controlla nella classe se tutti gli attributi sono necessari.
-        // Crea altre sfere
-        const sphere_position = new THREE.Vector3(10, 1, 10);
-        const sphere_scale = new THREE.Vector3(1,1,1);
-        const sphere = new Sphere("x.avif", true, false, false, this.#scene, this.#physicsWorld, sphere_position, sphere_scale);    
+        
+        
     }
 
+    get sphere1(){
+        return this.#sphere1;
+    }
+    get sphere2(){
+        return this.#sphere2;
+    }
+    get cube1(){
+        return this.#cube1;
+    }
+    get cube2(){
+        return this.#cube2;
+    }
 
     // Getter for ambient light
     get ambientLight(){

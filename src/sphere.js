@@ -9,19 +9,21 @@ export class Sphere{
     #texture_path;
     #model;
     #scene;
+    #isLocked;
     #physicsWorld;
     #physicsBody;
-    constructor(texture_path, isVisible, isCollectable, isUsable, scene, physicsWorld, position, scale){
+    constructor(texture_path, isVisible, isCollectable, isUsable, scene, physicsWorld, position){
         this.#texture_path = texture_path;
         this.#isVisibile = isVisible;
         this.#isCollectable = isCollectable;
         this.#isUsable = isUsable;
         this.#scene = scene;
         this.#physicsWorld = physicsWorld;
-        this.#LoadModel(position, scale);
+        this.#isLocked = false;
+        this.#LoadModel(position);
     }
 
-    #LoadModel(position, scale) {
+    #LoadModel(position) {
         const radius = 1;
         const widthSegments = 32;
         const heightSegments = 32;
@@ -39,7 +41,6 @@ export class Sphere{
         this.#scene.add(this.#model);
     
         this.#model.position.set(position.x, position.y, position.z);
-        this.#model.scale.set(scale.x, scale.y, scale.z);
     
         // Physics Body
         const boundingBox = new THREE.Box3().setFromObject(this.#model);
@@ -98,5 +99,24 @@ export class Sphere{
             this.#physicsWorld.removeBody(this.#physicsBody);
         }
     }
+
+    setIsLocked(){
+        this.#isLocked = true;
+    }
+    get isLocked(){
+        return this.#isLocked;
+    }
+
+    lockSphere(holePosition) {
+        const distance = this.#model.position.distanceTo(holePosition);
+        if(distance < 1){
+            this.#isLocked = true;
+            this.#model.position.lerp(holePosition, 0.01);
+            this.#model.material.color.set("yellow");
+            this.setIsVisible(true);
+        }
+    }
+
+    
     
 }

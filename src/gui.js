@@ -118,6 +118,119 @@ export class GameStart {
         this._layer.style.display = 'none';
     }
 }
+export class GameFinish {
+    constructor(startCallback) {
+        this.startCallback = startCallback;
+        this.currentPage = 0;
+
+        // Sfondo semi-trasparente
+        this._layer = document.createElement('div');
+        this._layer.style.position = 'absolute';
+        this._layer.style.left = '0';
+        this._layer.style.top = '0';
+        this._layer.style.width = '100%';
+        this._layer.style.height = '100%';
+        this._layer.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+
+        // Contenitore del menu
+        this._gameFinish = document.createElement('div');
+        this._gameFinish.style.position = 'absolute';
+        this._gameFinish.style.left = '50%';
+        this._gameFinish.style.top = '40%';
+        this._gameFinish.style.transform = 'translate(-50%, -50%)';
+        this._gameFinish.style.color = 'white';
+        this._gameFinish.style.fontSize = '35px';
+        this._gameFinish.style.fontFamily = 'Handjet';
+        this._gameFinish.style.textAlign = 'center';
+        this._gameFinish.style.padding = '20px';
+        this._gameFinish.style.width = '50%';
+        this._gameFinish.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+        this._gameFinish.style.border = '4px solid rgba(255, 255, 255, 0.5)';
+        this._gameFinish.style.borderRadius = '10px';
+
+        // Contenuto dinamico delle pagine
+        this.content = document.createElement('div');
+        this._gameFinish.appendChild(this.content);
+
+        // Pulsante per proseguire
+        this.nextButton = document.createElement('button');
+        this.nextButton.style.position = 'absolute';
+        this.nextButton.style.left = '50%';
+        this.nextButton.style.top = '120%';
+        this.nextButton.style.transform = 'translate(-50%, -50%)';
+        this.nextButton.style.width = '200px';
+        this.nextButton.style.height = '70px';
+        this.nextButton.style.backgroundColor = 'rgba(150, 150, 150, 0.5)';
+        this.nextButton.style.color = 'white';
+        this.nextButton.style.fontSize = '30px';
+        this.nextButton.style.fontFamily = 'Handjet';
+        this.nextButton.style.border = 'solid 4px rgba(255, 255, 255, 0.5)';
+        this.nextButton.style.borderRadius = '10px';
+        this.nextButton.innerHTML = 'Go further';
+
+        this.nextButton.onmouseover = () => {
+            this.nextButton.style.backgroundColor = 'rgba(180, 180, 180, 0.7)';
+            this.nextButton.style.border = 'solid 6px rgba(255, 255, 255, 0.5)';
+        };
+
+        this.nextButton.onmouseout = () => {
+            this.nextButton.style.backgroundColor = 'rgba(150, 150, 150, 0.5)';
+            this.nextButton.style.border = 'solid 4px rgba(255, 255, 255, 0.5)';
+        };
+
+        this.nextButton.onclick = () => {
+            this.nextPage();
+        };
+
+        this._gameFinish.appendChild(this.nextButton);
+        document.body.appendChild(this._layer);
+        document.body.appendChild(this._gameFinish);
+
+        this.updatePage();
+    }
+
+    updatePage() {
+        const pages = [
+            `<h1>Congratulations! </h1>
+             <p>You completed the test.</p>`,
+
+            `<h1>You are officially a multiverse surfer!</h1>
+             <p>You showed your abilities in managing space and traveling between different dimensions</p>`,
+
+            `<h1>Are you ready? It's time to go...</h1>
+             <p>Who passes the test is sent to the front in the WBW1 (First War-between-Worlds)...</p>`,
+
+        ];
+
+        this.content.innerHTML = pages[this.currentPage];
+
+        if (this.currentPage === pages.length - 1) {
+            this.nextButton.innerHTML = 'Finish';
+            this.nextButton.onclick = () => {
+                this.hide();
+                if (this.startCallback) this.startCallback();
+            };
+        } else {
+            this.nextButton.innerHTML = 'Go further';
+            this.nextButton.onclick = () => this.nextPage();
+        }
+    }
+
+    nextPage() {
+        this.currentPage++;
+        this.updatePage();
+    }
+
+    show() {
+        this._gameFinish.style.display = 'block';
+        this._layer.style.display = 'block';
+    }
+
+    hide() {
+        this._gameFinish.style.display = 'none';
+        this._layer.style.display = 'none';
+    }
+}
 
 export class GameMessage {
     constructor() {

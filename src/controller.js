@@ -20,6 +20,7 @@ export class Controller {
     #moveSpeed;
     #gameMessage;
     #isCommandsMessageShown;
+    #isCommandSecondRoom;
     #distanceThreshold;
     #holding;
     #heldObject;
@@ -39,6 +40,7 @@ export class Controller {
         this.#controls.autoRotate = true;
         this.#gameMessage = gameMessage;
         this.#isCommandsMessageShown = false;
+        this.#isCommandSecondRoom = false;
         this.#distanceThreshold = 3;
         this.#holding = false;
         this.#heldObject = null;
@@ -57,7 +59,7 @@ export class Controller {
     // Private method for listener of WASD buttons
     #AddWASDListener() {
         // this.#world.setDoorCanBeOpened(true);
-        // this.#character.enableTelekinetic();
+        this.#character.enableTelekinetic();
 
         document.addEventListener('keydown', (event) => {
             if (event.key === 'w') this.#moveForward = true;
@@ -182,14 +184,10 @@ export class Controller {
     
 
     findClosestObject() {
-        // const raycaster = new THREE.Raycaster();
-        // const direction = new THREE.Vector3(0,0,1);
-        // raycaster.set(this.#character.position, direction);
-        // const intersects = raycaster.intersectObjects(this.#scene.children, true);
-        // return intersects.length > 0 ? intersects[0].object : null;
         let closestObject = null;
-        let minDistance = 10;
-        for(const obj of this.#world.objectsInUniverse){
+        let minDistance = 6;
+        const objects = (this.#world.isUniverse) ? this.#world.objectsInUniverse : this.#world.objectsInXenoverse;
+        for(const obj of objects){
             if(this.#character.model.position.distanceTo(obj.model.position) < minDistance){
                 closestObject = obj;
                 minDistance = this.#character.model.position.distanceTo(obj.model.position);
@@ -240,6 +238,11 @@ export class Controller {
             this.#character.model.position.copy(this.#character.physicsBody.position);
             this.#character.model.position.y -= 1;  
             this.#world.physicsWorld.step(1 / 60);
+
+            if(this.#character.position.z > 30 && !this.#isCommandSecondRoom){
+                this.#gameMessage.showCommandMessage("Take the two spheres at the end of the maze");
+                this.#isCommandSecondRoom = true;
+            }
         }
     }
     #ComputeCameraOffset() {
@@ -390,6 +393,16 @@ export class Controller {
             this.#heldObject.physicsBody.position.copy(this.#heldObject.model.position);
 
         }
+    }
+
+    UpdateSphere(){
+        this.#world.sphere1.lockSphere(this.#world.cube1.position);
+        this.#world.sphere2.lockSphere(this.#world.cube2.position);
+        
+    }
+
+    CheckIfGameEnded(){
+        return this.#world.sphere1.isLocked && this.#world.sphere2.isLocked && this.#character.model.position.z > 92;
     }
 
     LevitationAnimation(obj, time){

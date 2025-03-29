@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
+import { CSG } from 'three-csg-ts';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 export class MazeUniverse{
@@ -176,6 +177,7 @@ export class MazeUniverse{
             this.#physicsWalls.push(wallBody);
         }
     }
+
 
     ActivateMaze(){
         for(const wall of this.#walls){
