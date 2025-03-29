@@ -2,9 +2,9 @@ import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
 import { CSG } from 'three-csg-ts';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { Object } from './object';
-import { Sphere } from './sphere';
-import { MazeUniverse, MazeXenoverse } from './maze'
+import { Object } from './object.js';
+import { Sphere } from './sphere.js';
+import { MazeUniverse, MazeXenoverse } from './maze.js'
 
 export class World {
     

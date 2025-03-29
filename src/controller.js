@@ -2,8 +2,8 @@ import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
 
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { GameMessage } from './gui';
-import { MazeUniverse } from './maze'
+import { GameMessage } from './gui.js';
+import { MazeUniverse } from './maze.js'
 
 export class Controller {
 
