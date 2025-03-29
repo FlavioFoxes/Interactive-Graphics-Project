@@ -1,0 +1,11 @@
+Model Information:
+* title:	Mini Power Generator
+* source:	https://sketchfab.com/3d-models/mini-power-generator-ee87e7cb81cb492d8caaf80d166ae7eb
+* author:	Jojomaster (https://sketchfab.com/Jojomaster)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Mini Power Generator" (https://sketchfab.com/3d-models/mini-power-generator-ee87e7cb81cb492d8caaf80d166ae7eb) by Jojomaster (https://sketchfab.com/Jojomaster) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

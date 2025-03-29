@@ -1,0 +1,11 @@
+Model Information:
+* title:	Generator Lowpoly
+* source:	https://sketchfab.com/3d-models/generator-lowpoly-d712b969f2c04fcdb8a020a2e3549f7f
+* author:	Alex_Z (https://sketchfab.com/Alex_Z)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Generator Lowpoly" (https://sketchfab.com/3d-models/generator-lowpoly-d712b969f2c04fcdb8a020a2e3549f7f) by Alex_Z (https://sketchfab.com/Alex_Z) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

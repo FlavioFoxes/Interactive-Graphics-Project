@@ -1,0 +1,11 @@
+Model Information:
+* title:	Laser-gun
+* source:	https://sketchfab.com/3d-models/laser-gun-4a98ed394d6646a6a2aeb20e78895d6a
+* author:	sayan_636 (https://sketchfab.com/sayan_636)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Laser-gun" (https://sketchfab.com/3d-models/laser-gun-4a98ed394d6646a6a2aeb20e78895d6a) by sayan_636 (https://sketchfab.com/sayan_636) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

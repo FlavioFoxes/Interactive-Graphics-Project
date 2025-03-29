@@ -1,0 +1,11 @@
+Model Information:
+* title:	Generator3
+* source:	https://sketchfab.com/3d-models/generator3-5b39de4c30df4e95a160e4a99487f2fa
+* author:	PounUP (https://sketchfab.com/PounUP)
+
+Model License:
+* license type:	CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
+* requirements:	Author must be credited. No commercial use.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Generator3" (https://sketchfab.com/3d-models/generator3-5b39de4c30df4e95a160e4a99487f2fa) by PounUP (https://sketchfab.com/PounUP) licensed under CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)

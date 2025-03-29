@@ -1,0 +1,11 @@
+Model Information:
+* title:	SCIFI GENERATOR
+* source:	https://sketchfab.com/3d-models/scifi-generator-bf2e1a087adb4628a376ffbed17c41ff
+* author:	Cinnamine3D (https://sketchfab.com/LordCinn)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "SCIFI GENERATOR" (https://sketchfab.com/3d-models/scifi-generator-bf2e1a087adb4628a376ffbed17c41ff) by Cinnamine3D (https://sketchfab.com/LordCinn) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
