@@ -1,0 +1,11 @@
+Model Information:
+* title:	Generator BM-13G Gen-1
+* source:	https://sketchfab.com/3d-models/generator-bm-13g-gen-1-b45a8cb17fbd432781c334c6da632182
+* author:	BlackMike (https://sketchfab.com/BlackMike)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Generator BM-13G Gen-1" (https://sketchfab.com/3d-models/generator-bm-13g-gen-1-b45a8cb17fbd432781c334c6da632182) by BlackMike (https://sketchfab.com/BlackMike) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

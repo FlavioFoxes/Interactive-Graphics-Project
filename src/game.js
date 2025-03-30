@@ -17,9 +17,9 @@ export class Game {
     startGame() {
         const gameMessage = new GameMessage();
         const scene = new THREE.Scene();
-        const axesHelper = new THREE.AxesHelper( 5 );
-        scene.add( axesHelper );
-        const world = new World(scene);
+        // const axesHelper = new THREE.AxesHelper( 5 );
+        // scene.add( axesHelper );
+        const world = new World(scene, gameMessage);
         const character = new Character(scene, world);
         const camera = new Camera(scene, character);
         
@@ -31,11 +31,12 @@ export class Game {
         // Create Controller to play
         const controller = new Controller(camera, character, renderer, world, gameMessage, scene);
         
-        const cannonDebugger = new CannonDebugger(scene, world.physicsWorld, {});
-        // Maybe this can be moved somewhere else (maybe in world.js?)
+        // Create CANNON debugger
+        // const cannonDebugger = new CannonDebugger(scene, world.physicsWorld, {});
+
         function animate() {
             world.physicsWorld.fixedStep();
-            cannonDebugger.update();
+            // cannonDebugger.update();
             if (character.mixer) {
             character.mixer.update(0.01); 
             }
@@ -43,12 +44,18 @@ export class Game {
             if(world.doorMixer){
                 world.doorMixer.update(0.01);
             }
+            if(world.plasma.mixer){
+                world.plasma.mixer.update(0.01);
+            }
+            controller.UpdateSphere();
             controller.UpdateCharacterPosition();
             controller.UpdateCameraPosition();
             controller.UpdateCharacterAnimation();
             controller.UpdateInteractionWithObjects();
+            controller.SynchronizeMeshAndBody();
             controller.UpdateTelekineticManagement();
-            controller.UpdateSphere();
+            controller.UpdateCurrentGenerator();
+
             if(controller.CheckIfGameEnded()){
                 renderer.setAnimationLoop(null);
                 const gameFinish = new GameFinish(() => window.close());
@@ -60,17 +67,16 @@ export class Game {
     }
 
     pauseGame() {
-        this.#previousAnimationLoop = renderer.getAnimationLoop(); // Salva il loop attuale
-        renderer.setAnimationLoop(null); // Ferma il rendering
+        this.#previousAnimationLoop = renderer.getAnimationLoop();
+        renderer.setAnimationLoop(null); 
     }
     
     resumeGame() {
-        renderer.setAnimationLoop(this.#previousAnimationLoop); // Riprende il loop di animazione
+        renderer.setAnimationLoop(this.#previousAnimationLoop); 
     }
 
     endGame() {
         renderer.setAnimationLoop(null);
-        // Disabilita l'input del giocatore
         window.removeEventListener("keydown", this.onKeyDown);
         window.removeEventListener("keyup", this.onKeyUp);
 

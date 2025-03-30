@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
-import { CSG } from 'three-csg-ts';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 export class MazeUniverse{
@@ -23,9 +22,8 @@ export class MazeUniverse{
         this.#lights = [];
         this.#lights_model = [];
         this.#CreateWalls();
-        // this.#AddWallsPhysics();
+        this.#AddWallsPhysics();
         this.#AddLights();  
-        this.DeactivateMaze();
     }
 
     #CreateWalls(){
@@ -153,7 +151,7 @@ export class MazeUniverse{
                 else{
                     model.rotation.y = Math.PI/2;
                 }
-                model.updateMatrixWorld(); // Assicurati che la matrice del mondo sia aggiornata
+                model.updateMatrixWorld(); 
                 this.#lights_model.push(model);
     
             })
@@ -236,8 +234,9 @@ export class MazeXenoverse{
         this.#lights = [];
         this.#lights_model = [];
         this.#CreateWalls();
-        // this.#AddWallsPhysics();
+        this.#AddWallsPhysics();
         this.#AddLights();
+        this.DeactivateMaze();
     }
 
     #CreateWalls(){
@@ -257,16 +256,16 @@ export class MazeXenoverse{
             new THREE.MeshStandardMaterial({ map: wallTexture })
 
         );
-        wall1.position.set(20, this.#wallHeight / 2, 45);
+        wall1.position.set(20, this.#wallHeight / 2, 40);
         this.#scene.add(wall1);
         this.#walls.push(wall1);
 
         const wall2 = new THREE.Mesh(
-            new THREE.BoxGeometry(this.#wallSize, this.#wallHeight, 15),
+            new THREE.BoxGeometry(this.#wallSize, this.#wallHeight, 20),
             new THREE.MeshStandardMaterial({ map: wallTexture })
 
         );
-        wall2.position.set(10, this.#wallHeight / 2, 52.5);
+        wall2.position.set(10, this.#wallHeight / 2, 50);
         this.#scene.add(wall2);
         this.#walls.push(wall2);
 
@@ -280,10 +279,10 @@ export class MazeXenoverse{
         this.#walls.push(wall3);
     
         const wall4 = new THREE.Mesh(
-            new THREE.BoxGeometry(this.#wallSize, this.#wallHeight, 15),
+            new THREE.BoxGeometry(this.#wallSize, this.#wallHeight, 20),
             new THREE.MeshStandardMaterial({ map: wallTexture })
         );
-        wall4.position.set(-10, this.#wallHeight / 2, 52.5);
+        wall4.position.set(-10, this.#wallHeight / 2, 50);
         this.#scene.add(wall4);
         this.#walls.push(wall4);
 
@@ -291,7 +290,7 @@ export class MazeXenoverse{
             new THREE.BoxGeometry(20, this.#wallHeight, this.#wallSize),
             new THREE.MeshStandardMaterial({ map: wallTexture })
         );
-        wall5.position.set(-20, this.#wallHeight / 2, 45);
+        wall5.position.set(-20, this.#wallHeight / 2, 40);
         this.#scene.add(wall5);
         this.#walls.push(wall5);
 
@@ -381,7 +380,7 @@ export class MazeXenoverse{
                 else{
                     model.rotation.y = Math.PI/2;
                 }
-                model.updateMatrixWorld(); // Assicurati che la matrice del mondo sia aggiornata
+                model.updateMatrixWorld(); 
                 this.#lights_model.push(model);
     
             })

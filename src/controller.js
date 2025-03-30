@@ -2,8 +2,6 @@ import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
 
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { GameMessage } from './gui.js';
-import { MazeUniverse } from './maze.js'
 
 export class Controller {
 
@@ -58,8 +56,6 @@ export class Controller {
 
     // Private method for listener of WASD buttons
     #AddWASDListener() {
-        // this.#world.setDoorCanBeOpened(true);
-        this.#character.enableTelekinetic();
 
         document.addEventListener('keydown', (event) => {
             if (event.key === 'w') this.#moveForward = true;
@@ -69,7 +65,12 @@ export class Controller {
             if (event.key === 'u') {
                 this.#world.setUniverse(!this.#world.isUniverse);
                 if(!this.#isCommandsMessageShown){
-                    this.#gameMessage.showCommandMessage("Commands");
+                    this.#gameMessage.showCommandMessage("Here you are! This is the Xenoverse.<br> The commands are part of this Verse until you didn't discover them.<br> \
+                                                         Now I can show you them: <br>\
+                                                         WASD: move <br>\
+                                                         U: switch between Universe and Xenoverse <br>\
+                                                         T: interact with environment (take object / activate something)<br>\
+                                                         G: use of telekinetics (after you will obtain the weapon)");
                     this.#isCommandsMessageShown = true;
                 }
                 if(this.#world.isUniverse){
@@ -96,27 +97,18 @@ export class Controller {
                         if (obj.model && character_position.distanceTo(obj.model.position) < this.#distanceThreshold) {
                             if (obj.isCollectable) {
                                 this.#CollectObject(obj);
-                                collectedObject = obj;  // Memorizza l'oggetto raccolto
-                                break;  // Esce dal ciclo dopo aver raccolto un oggetto
+                                collectedObject = obj;  
+                                break;  
                             }
                             else if(obj.isUsable){
-                                if(this.#character.numObjectsCollected < 4){
+                                if(this.#character.numObjectsCollected < 3){
                                     this.#gameMessage.showUsableMessage("You haven't collected all the necessary objects to use the machinery");
                                 }
                                 else{
-                                    this.#gameMessage.showUsableMessage("You collected all the objects! This telekinetics gun is for you. You can now proceed over the door");
+                                    this.#gameMessage.showUsableMessage("You collected all the objects! This telekinetics gun is for you. Now you have to take the plasma to the door generator to reactivate the electricity");
                                     this.#world.AddTelekineticsGun();
-                                    this.#world.setDoorCanBeOpened(true);
                                     this.#character.enableTelekinetic();
-                                    this.#world.CreateUniverseMaze();
-                                    this.#world.CreateXenoverseMaze();
-                                    console.warn("MAZE CREATO");
-                                    // if(this.#world.isUniverse){
-                                    //     this.#world.mazeXenoverse.DeactivateMaze();
-                                    // }
-                                    // else{
-                                    //     this.#world.mazeUniverse.DeactivateMaze();
-                                    // }                                    
+                                          
                                 }
                                 this.#gameMessage.hideObjectsMessage();
 
@@ -129,18 +121,15 @@ export class Controller {
                             this.#world.OpenDoor();
                         }
                         else{
-                            this.#gameMessage.showUsableMessage("The door will be unlocked using the machinery");
+                            this.#gameMessage.showUsableMessage("The door has no electricity. Reactivate it to open it");
                         }
                     }
                     
-                    // Se un oggetto è stato raccolto, aggiorna la lista rimuovendolo
                     if (collectedObject) {
-                        // let objectsList = this.#world.isUniverse ? this.#world.objectsInUniverse : this.#world.objectsInXenoverse;
-                    
                         for (let i = objects.length - 1; i >= 0; i--) {
                             if (objects[i] === collectedObject) {
-                                objects.splice(i, 1);  // Rimuove direttamente l'oggetto dalla lista
-                                break;  // Esce dopo aver rimosso l'oggetto
+                                objects.splice(i, 1); 
+                                break;
                             }
                         }
                     }
@@ -173,7 +162,8 @@ export class Controller {
                     
                     if(this.#heldObject){
                         this.#heldObject.enablePhysics();
-                        this.#heldObject.model.position.copy(this.#heldObject.physicsBody.position);
+                        if(this.#heldObject.physicsBody)
+                            this.#heldObject.model.position.copy(this.#heldObject.physicsBody.position);
                     }
                     this.#heldObject = null;
                     this.#holding = false;
@@ -240,7 +230,9 @@ export class Controller {
             this.#world.physicsWorld.step(1 / 60);
 
             if(this.#character.position.z > 30 && !this.#isCommandSecondRoom){
-                this.#gameMessage.showCommandMessage("Take the two spheres at the end of the maze");
+                this.#gameMessage.showCommandMessage("Take the two spheres inside their corresponding cube at the end of the maze. <br>\
+                                                      They are the only objects we discovered to be able to cross the two Verses, <br>\
+                                                      so they can go beyond what exists in the Universe and the Xenoverse");
                 this.#isCommandSecondRoom = true;
             }
         }
@@ -277,13 +269,6 @@ export class Controller {
     UpdateCameraPosition() {
         if (this.#character.model) {
             
-            // This can be used to make the camera motion smoother
-            // const t = 1.0 - Math.pow(0.001, 1);
-            // this.#currentPosition.lerp(cameraOffset, t);
-            // this.#currentLookat.lerp(cameralLookat, t);
-            // this.#camera.perspectiveCamera.position.copy(this._currentPosition);
-            // this.#camera.perspectiveCamera.lookAt(this._currentLookat);
-            
             const cameraLookat = this.#ComputeCameraLookat();
             const cameraOffset = this.#ComputeCameraOffset();
             this.#camera.perspectiveCamera.position.copy(cameraOffset);
@@ -317,6 +302,13 @@ export class Controller {
             obj.setIsVisible(false);
         }
 
+        if(this.#world.generator1.model){
+            this.#world.generator1.setIsVisible(true);
+        }
+        if(this.#world.generator2.model){
+            this.#world.generator2.setIsVisible(false);
+        }
+
         if(this.#world.doorCanBeOpened){
             this.#world.mazeUniverse.ActivateMaze();
             this.#world.mazeXenoverse.DeactivateMaze();
@@ -335,6 +327,12 @@ export class Controller {
         }
         for(const obj of this.#world.objectsInXenoverse){
             obj.setIsVisible(true);
+        }
+        if(this.#world.generator1.model){
+            this.#world.generator1.setIsVisible(false);
+        }
+        if(this.#world.generator2.model){
+            this.#world.generator2.setIsVisible(true);
         }
 
         if(this.#world.doorCanBeOpened){
@@ -374,15 +372,14 @@ export class Controller {
 
     UpdateTelekineticManagement(){
         if(this.#holding && this.#heldObject){
-            const targetPosition = new THREE.Vector3(0,1,2);
+            const targetPosition = new THREE.Vector3(0,1.5,2.5);
             // Convert euler angle of rotation in quaternion
             const quaternion = new THREE.Quaternion();
             this.#character.model.getWorldQuaternion(quaternion);
             targetPosition.applyQuaternion(quaternion);
             targetPosition.add(this.#character.model.position);
 
-            // Interpolazione fluida tra posizione attuale e target
-            const smoothFactor = 0.1; // Velocità di avvicinamento, più basso = più lento
+            const smoothFactor = 0.1;
             const tolerance = 0.1;
             if(this.#heldObject.model.position.distanceTo(targetPosition) > tolerance){
                 this.#heldObject.model.position.lerp(targetPosition, smoothFactor);
@@ -390,7 +387,19 @@ export class Controller {
             else{
                 this.LevitationAnimation(this.#heldObject, performance.now());
             }
-            this.#heldObject.physicsBody.position.copy(this.#heldObject.model.position);
+            if(this.#heldObject.physicsBody)
+                this.#heldObject.physicsBody.position.copy(this.#heldObject.model.position);
+
+        }
+
+    }
+
+    SynchronizeMeshAndBody(){
+        const objects = (this.#world.isUniverse) ? this.#world.objectsInUniverse : this.#world.objectsInXenoverse;
+        for(const obj of objects){
+            if(obj.model && obj.physicsBody){
+                obj.model.position.copy(obj.physicsBody.position);
+            }
 
         }
     }
@@ -401,26 +410,31 @@ export class Controller {
         
     }
 
+    UpdateCurrentGenerator(){
+        this.#world.ActivateGenRotating();
+    }
+
     CheckIfGameEnded(){
         return this.#world.sphere1.isLocked && this.#world.sphere2.isLocked && this.#character.model.position.z > 92;
     }
 
     LevitationAnimation(obj, time){
         const amplitude = 0.5;
-        const frequency = 1; // 1 ciclo al secondo
+        const frequency = 1;
         const currentTime = performance.now() / 1000;
-        const delta = (Math.sin(currentTime * Math.PI * 2 * frequency) + 1) / 2; // Normalizza tra 0 e 1
+        // Normalization between 0 and 1
+        const delta = (Math.sin(currentTime * Math.PI * 2 * frequency) + 1) / 2; 
 
         const minY = obj.model.position.y - amplitude;
         const maxY = obj.model.position.y + amplitude;
 
         const targetPosition = new THREE.Vector3(
         obj.model.position.x,
-        THREE.MathUtils.lerp(minY, maxY, delta), // Interpola tra minY e maxY
+        THREE.MathUtils.lerp(minY, maxY, delta), 
         obj.model.position.z
         );
 
-        obj.model.position.lerp(targetPosition, 0.01); // Interpolazione fluida
+        obj.model.position.lerp(targetPosition, 0.01);
     }
 
     #CollectObject(obj){
