@@ -6,7 +6,6 @@ export class GameStart {
         this.startCallback = startCallback;
         this.currentPage = 0;
 
-        // Sfondo semi-trasparente
         this._layer = document.createElement('div');
         this._layer.style.position = 'absolute';
         this._layer.style.left = '0';
@@ -15,7 +14,6 @@ export class GameStart {
         this._layer.style.height = '100%';
         this._layer.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
 
-        // Contenitore del menu
         this._gameStart = document.createElement('div');
         this._gameStart.style.position = 'absolute';
         this._gameStart.style.left = '50%';
@@ -31,11 +29,9 @@ export class GameStart {
         this._gameStart.style.border = '4px solid rgba(255, 255, 255, 0.5)';
         this._gameStart.style.borderRadius = '10px';
 
-        // Contenuto dinamico delle pagine
         this.content = document.createElement('div');
         this._gameStart.appendChild(this.content);
 
-        // Pulsante per proseguire
         this.nextButton = document.createElement('button');
         this.nextButton.style.position = 'absolute';
         this.nextButton.style.left = '50%';
@@ -123,7 +119,6 @@ export class GameFinish {
         this.startCallback = startCallback;
         this.currentPage = 0;
 
-        // Sfondo semi-trasparente
         this._layer = document.createElement('div');
         this._layer.style.position = 'absolute';
         this._layer.style.left = '0';
@@ -132,7 +127,6 @@ export class GameFinish {
         this._layer.style.height = '100%';
         this._layer.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
 
-        // Contenitore del menu
         this._gameFinish = document.createElement('div');
         this._gameFinish.style.position = 'absolute';
         this._gameFinish.style.left = '50%';
@@ -148,11 +142,9 @@ export class GameFinish {
         this._gameFinish.style.border = '4px solid rgba(255, 255, 255, 0.5)';
         this._gameFinish.style.borderRadius = '10px';
 
-        // Contenuto dinamico delle pagine
         this.content = document.createElement('div');
         this._gameFinish.appendChild(this.content);
 
-        // Pulsante per proseguire
         this.nextButton = document.createElement('button');
         this.nextButton.style.position = 'absolute';
         this.nextButton.style.left = '50%';
@@ -313,7 +305,6 @@ export class GameMessage {
     showCommandMessage(text) {
         this._messageCommandBox.innerHTML = `<p>${text}</p>`;
         
-        // Creazione del pulsante "Continua"
         const button = document.createElement('button');
         button.innerText = "Continue";
         button.style.marginTop = "10px";
@@ -346,12 +337,10 @@ export class GameMessage {
         this._messageCollectedBox.innerHTML = `<p>${text}</p>`;
         this._messageCollectedBox.style.display = 'block';
 
-        // Se un timeout è già attivo, lo cancella
         if (this._timeoutId) {
             clearTimeout(this._timeoutId);
         }
 
-        // Dopo 3 secondi il messaggio scompare automaticamente
         this._timeoutId = setTimeout(() => {
             this.hideCollectedMessage();
         }, 6000);
@@ -363,34 +352,15 @@ export class GameMessage {
         this._messageUsableBox.innerHTML = `<p>${text}</p>`;
         this._messageUsableBox.style.display = 'block';
 
-        // Se un timeout è già attivo, lo cancella
         if (this._timeoutId) {
             clearTimeout(this._timeoutId);
         }
 
-        // Dopo 3 secondi il messaggio scompare automaticamente
         this._timeoutId = setTimeout(() => {
             this.hideUsableMessage();
-        }, 3000);
+        }, 6000);
     }
     hideUsableMessage() {
         this._messageUsableBox.style.display = 'none';
     }
 }
-
-// export class GUI {
-//     #gameMessage;
-//     #gameStart;
-//     constructor(){
-//         this.#gameMessage = new GameMessage();
-//         this.#gameStart = new GameStart();
-//     }
-
-//     get gameMessage(){
-//         return this.#gameMessage;
-//     }
-
-//     get gameStart() {
-//         return this.#gameStart;
-//     }
-// }

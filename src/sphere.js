@@ -45,17 +45,14 @@ export class Sphere{
         // Physics Body
         const boundingBox = new THREE.Box3().setFromObject(this.#model);
         const size = boundingBox.getSize(new THREE.Vector3());
-    
-        // Creazione del corpo fisico
         // this.#physicsBody = new CANNON.Body({
         //     mass: 5,
-        //     shape: new CANNON.Sphere(radius),  // Usa un corpo sferico per la fisica
+        //     shape: new CANNON.Sphere(radius),  
         //     position: new CANNON.Vec3(position.x, position.y, position.z),
         // });
     
         // this.#physicsWorld.addBody(this.#physicsBody);
     
-        // Imposta la visibilità, se necessario
         this.setIsVisible(this.#isVisibile);
     }
     

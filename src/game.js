@@ -31,8 +31,9 @@ export class Game {
         // Create Controller to play
         const controller = new Controller(camera, character, renderer, world, gameMessage, scene);
         
+        // Create CANNON debugger
         // const cannonDebugger = new CannonDebugger(scene, world.physicsWorld, {});
-        // Maybe this can be moved somewhere else (maybe in world.js?)
+
         function animate() {
             world.physicsWorld.fixedStep();
             // cannonDebugger.update();
@@ -66,17 +67,16 @@ export class Game {
     }
 
     pauseGame() {
-        this.#previousAnimationLoop = renderer.getAnimationLoop(); // Salva il loop attuale
-        renderer.setAnimationLoop(null); // Ferma il rendering
+        this.#previousAnimationLoop = renderer.getAnimationLoop();
+        renderer.setAnimationLoop(null); 
     }
     
     resumeGame() {
-        renderer.setAnimationLoop(this.#previousAnimationLoop); // Riprende il loop di animazione
+        renderer.setAnimationLoop(this.#previousAnimationLoop); 
     }
 
     endGame() {
         renderer.setAnimationLoop(null);
-        // Disabilita l'input del giocatore
         window.removeEventListener("keydown", this.onKeyDown);
         window.removeEventListener("keyup", this.onKeyUp);
 

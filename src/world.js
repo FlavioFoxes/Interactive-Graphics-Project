@@ -84,7 +84,6 @@ export class World {
     }
 
     #AddCubes(){
-        // Creazione dei cubi
         const cubeGeometry = new THREE.BoxGeometry(1.7, 1.7, 1.7);
         const cubeMaterial = new THREE.MeshStandardMaterial({ color: 0xaaaaaa });
         const cube1 = new THREE.Mesh(cubeGeometry, cubeMaterial);
@@ -128,8 +127,8 @@ export class World {
             this.#door.position.set(0, -1, 29.5);
             // this.#door.scale.set(1,1,1);
             this.#door.scale.set(0.04, 0.04, 0.04);
-            // Calcola le dimensioni del modello direttamente da this.#door
-            this.#door.updateMatrixWorld(); // Assicurati che la matrice del mondo sia aggiornata
+            this.#door.updateMatrixWorld(); 
+
             const box = new THREE.Box3().setFromObject(this.#door);
             box.getSize(this.#doorDimensions);
             this.#doorDimensions.z = 4;
@@ -140,10 +139,9 @@ export class World {
             } else {
                 console.warn("Nessuna animazione trovata per la porta.");
             }
-
             this.#doorMixer = new THREE.AnimationMixer(this.#door);
-            this.#AddDoorPhysics();
 
+            this.#AddDoorPhysics();
         })
     }
 
@@ -163,7 +161,7 @@ export class World {
     #AddLights() {
         const color = 0xffffff; //0xff0000;
         
-        this.#ambientLight = new THREE.AmbientLight(color, 0.7); // Aumentata l'intensità
+        this.#ambientLight = new THREE.AmbientLight(color, 0.7);
         this.#scene.add(this.#ambientLight);
         this.#lights.push(this.#ambientLight);
         const lightIntensity = 5; 
@@ -311,7 +309,7 @@ export class World {
         const wallThickness = 1;
         const floorSize = 60;
     
-        // Parete sinistra
+        // Left Wall
         const leftWallR1 = new THREE.Mesh(
             new THREE.BoxGeometry(wallThickness, wallHeight, floorSize),
             new THREE.MeshStandardMaterial({ map: wallTexture })
@@ -322,7 +320,7 @@ export class World {
         this.#walls.push(leftWallR1);
 
     
-        // Parete destra
+        // Right Wall
         const rightWallR1 = new THREE.Mesh(
             new THREE.BoxGeometry(wallThickness, wallHeight, floorSize),
             new THREE.MeshStandardMaterial({ map: wallTexture })
@@ -331,7 +329,7 @@ export class World {
         this.#scene.add(rightWallR1);
         this.#walls.push(rightWallR1);
     
-        // Parete posteriore
+        // Back Wall
         const backWallR1 = new THREE.Mesh(
             new THREE.BoxGeometry(floorSize, wallHeight, wallThickness),
             new THREE.MeshStandardMaterial({ map: wallTexture })
@@ -340,21 +338,21 @@ export class World {
         this.#scene.add(backWallR1);
         this.#walls.push(backWallR1);
     
-        // Parete frontale con fessura
+        // Front Left wall
         const frontWallLeftR1 = new THREE.Mesh(
-            new THREE.BoxGeometry(floorSize/2, wallHeight, wallThickness), // Ridotto di "doorWidth" per fare spazio alla porta
+            new THREE.BoxGeometry(floorSize/2, wallHeight, wallThickness), 
             new THREE.MeshStandardMaterial({ map: wallTexture })
         );
-        frontWallLeftR1.position.set(floorSize/2.3, wallHeight / 2, floorSize / 2);  // Posizionato alla metà del lato frontale
+        frontWallLeftR1.position.set(floorSize/2.3, wallHeight / 2, floorSize / 2);  
         this.#scene.add(frontWallLeftR1);
         this.#walls.push(frontWallLeftR1);
     
-           // Parete frontale con fessura
+        // Front Right wall
         const frontWallRightR1 = new THREE.Mesh(
-            new THREE.BoxGeometry(floorSize/2, wallHeight, wallThickness), // Ridotto di "doorWidth" per fare spazio alla porta
+            new THREE.BoxGeometry(floorSize/2, wallHeight, wallThickness), 
             new THREE.MeshStandardMaterial({ map: wallTexture })
         );
-        frontWallRightR1.position.set(-floorSize/2.3, wallHeight / 2, floorSize / 2);  // Posizionato alla metà del lato frontale
+        frontWallRightR1.position.set(-floorSize/2.3, wallHeight / 2, floorSize / 2);  
         this.#scene.add(frontWallRightR1);
         this.#walls.push(frontWallRightR1);
 
@@ -366,7 +364,7 @@ export class World {
         const repeat2Z = 40 / 20;
         wall2Texture.repeat.set(repeat2X, repeat2Z);
 
-        // Parete sinistra
+        // Left Wall
         const leftWallR2 = new THREE.Mesh(
             new THREE.BoxGeometry(wallThickness, wallHeight, floorSize),
             new THREE.MeshStandardMaterial({ map: wall2Texture })
@@ -375,7 +373,7 @@ export class World {
         this.#scene.add(leftWallR2);
         this.#walls.push(leftWallR2);
     
-        // Parete destra
+        // Right Wall
         const rightWallR2 = new THREE.Mesh(
             new THREE.BoxGeometry(wallThickness, wallHeight, floorSize),
             new THREE.MeshStandardMaterial({ map: wall2Texture })
@@ -384,21 +382,21 @@ export class World {
         this.#scene.add(rightWallR2);
         this.#walls.push(rightWallR2);
     
-        // Parete frontale con fessura
+        // Front Left wall
         const frontWallLeftR2 = new THREE.Mesh(
-            new THREE.BoxGeometry(floorSize/2, wallHeight, wallThickness), // Ridotto di "doorWidth" per fare spazio alla porta
+            new THREE.BoxGeometry(floorSize/2, wallHeight, wallThickness), 
             new THREE.MeshStandardMaterial({ map: wall2Texture })
         );
-        frontWallLeftR2.position.set(floorSize/3.5, wallHeight / 2, floorSize*1.5);  // Posizionato alla metà del lato frontale
+        frontWallLeftR2.position.set(floorSize/3.5, wallHeight / 2, floorSize*1.5);  
         this.#scene.add(frontWallLeftR2);
         this.#walls.push(frontWallLeftR2);
     
-            // Parete frontale con fessura
+        // Front Right wall
         const frontWallRightR2 = new THREE.Mesh(
-            new THREE.BoxGeometry(floorSize/2, wallHeight, wallThickness), // Ridotto di "doorWidth" per fare spazio alla porta
+            new THREE.BoxGeometry(floorSize/2, wallHeight, wallThickness), 
             new THREE.MeshStandardMaterial({ map: wall2Texture })    
         );
-        frontWallRightR2.position.set(-floorSize/3.5, wallHeight / 2, floorSize*1.5);  // Posizionato alla metà del lato frontale
+        frontWallRightR2.position.set(-floorSize/3.5, wallHeight / 2, floorSize*1.5);  
         this.#scene.add(frontWallRightR2);
         this.#walls.push(frontWallRightR2);
 
@@ -441,7 +439,6 @@ export class World {
                                      false, false, true, this.#scene, this.#physicsWorld, lowpoly_position, lowpoly_scale, 1000);
         this.#objectsInXenoverse.push(lowpoly);
     
-        // Si può aggiungere effetto lievitazione
         const cube_position = new THREE.Vector3(-10, 2, 15);
         const cube_scale = new THREE.Vector3(0.001, 0.001, 0.001);
         const cube = new Object('generator3/scene.gltf', 
@@ -510,7 +507,6 @@ export class World {
         return this.#generator2;
     }
 
-    // Getter for ambient light
     get ambientLight(){
         return this.#ambientLight;
     }

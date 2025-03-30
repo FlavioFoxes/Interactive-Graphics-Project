@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
-import { CSG } from 'three-csg-ts';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 export class MazeUniverse{
@@ -152,7 +151,7 @@ export class MazeUniverse{
                 else{
                     model.rotation.y = Math.PI/2;
                 }
-                model.updateMatrixWorld(); // Assicurati che la matrice del mondo sia aggiornata
+                model.updateMatrixWorld(); 
                 this.#lights_model.push(model);
     
             })
@@ -381,7 +380,7 @@ export class MazeXenoverse{
                 else{
                     model.rotation.y = Math.PI/2;
                 }
-                model.updateMatrixWorld(); // Assicurati che la matrice del mondo sia aggiornata
+                model.updateMatrixWorld(); 
                 this.#lights_model.push(model);
     
             })
