@@ -30,7 +30,7 @@ export class Character {
 
     #InitPhysics(){
         this.#physicsBody = new CANNON.Body({
-            mass: 1, 
+            mass: 80, 
             shape: new CANNON.Box(new CANNON.Vec3(0.5, 1, 0.5)),  
             position: new CANNON.Vec3(this.#model.position.x, this.#model.position.y+2, this.#model.position.z),
         });

@@ -1,0 +1,11 @@
+Model Information:
+* title:	Radio_VEF202
+* source:	https://sketchfab.com/3d-models/radio-vef202-58934369266641b2a7be80e0da9cb79d
+* author:	egorova.e (https://sketchfab.com/silentegor)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Radio_VEF202" (https://sketchfab.com/3d-models/radio-vef202-58934369266641b2a7be80e0da9cb79d) by egorova.e (https://sketchfab.com/silentegor) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

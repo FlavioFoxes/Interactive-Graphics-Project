@@ -81,10 +81,10 @@ export class GameStart {
              <p>There lives everything you don't know .</p>`,
 
             `<h1>Are you ready?</h1>
-             <p>You will be thrown in the Universe, and you will find the Xenoverse. Are you ready?</p>`,
+             <p>You will be thrown in the Universe, and you will have to discover a way to find the Xenoverse.</p>`,
 
             `<h1>Commands? </h1>
-             <p>Your journey begins now. Brace yourself for the unknown and step into the portal.</p>`,
+             <p>Oh, if you don't know them, you can find them in the Xenoverse...</p>`,
 
              
         ];
@@ -198,7 +198,7 @@ export class GameFinish {
              <p>You showed your abilities in managing space and traveling between different dimensions</p>`,
 
             `<h1>Are you ready? It's time to go...</h1>
-             <p>Who passes the test is sent to the front in the WBW1 (First War-between-Worlds)...</p>`,
+             <p>Who passes the test is sent to the front in the DW1 (Dimensions War 1)...</p>`,
 
         ];
 
@@ -315,7 +315,7 @@ export class GameMessage {
         
         // Creazione del pulsante "Continua"
         const button = document.createElement('button');
-        button.innerText = "Continua";
+        button.innerText = "Continue";
         button.style.marginTop = "10px";
         button.style.padding = "8px 12px";
         button.style.fontSize = "18px";
@@ -354,7 +354,7 @@ export class GameMessage {
         // Dopo 3 secondi il messaggio scompare automaticamente
         this._timeoutId = setTimeout(() => {
             this.hideCollectedMessage();
-        }, 3000);
+        }, 6000);
     }
     hideCollectedMessage() {
         this._messageCollectedBox.style.display = 'none';

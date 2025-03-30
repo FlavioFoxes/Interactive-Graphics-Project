@@ -11,8 +11,8 @@ import CannonDebugger from 'cannon-es-debugger';
 import { Game } from './src/game.js';
 
 const game = new Game();
-// const startMenu = new GameStart(() => game.startGame());
-game.startGame();
+const startMenu = new GameStart(() => game.startGame());
+// game.startGame();
 
 
 // function startGame(){

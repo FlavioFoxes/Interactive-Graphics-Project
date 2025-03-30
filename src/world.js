@@ -2,9 +2,9 @@ import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
 import { CSG } from 'three-csg-ts';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { Object } from './object';
-import { Sphere } from './sphere';
-import { MazeUniverse, MazeXenoverse } from './maze'
+import { Object } from './object.js';
+import { Sphere } from './sphere.js';
+import { MazeUniverse, MazeXenoverse } from './maze.js'
 
 export class World {
     
@@ -28,15 +28,22 @@ export class World {
     #objectsInUniverse;
     #objectsInXenoverse;
     #isUniverse;
+    #isMessageDoorShowed;
     #doorCanBeOpened;
     #mazeUniverse;
     #mazeXenoverse;
 
     #sphere1;
     #sphere2;
+    #plasma;
+    #gen_rotating;
+    #generator1;
+    #generator2;
 
-    constructor(scene) {
+    #gameMessage;
+    constructor(scene, gameMessage) {
         this.#scene = scene;
+        this.#gameMessage = gameMessage;
         this.#floors = [];
         this.#ceilings = [];
         this.#walls = [];
@@ -47,6 +54,7 @@ export class World {
         this.#objectsInXenoverse = [];
         this.#isUniverse = true;
         this.#doorCanBeOpened = false;
+        this.#isMessageDoorShowed = false;
         this.#Init();
     }
     
@@ -98,15 +106,17 @@ export class World {
     }
 
     #AddSpheres() {
-        const sphere1_position = new THREE.Vector3(10, 1, 10);
+        const sphere1_position = new THREE.Vector3(27, 3.5, 0);
         this.#sphere1 = new Sphere("textures/Texture_4k/DefaultMaterial_Emissive.png", true, false, false, this.#scene, this.#physicsWorld, sphere1_position);    
         this.#objectsInUniverse.push(this.#sphere1);
+        this.#sphere1.disablePhysics();
         // this.#objectsInXenoverse.push(this.#sphere1);
 
-        const sphere2_position = new THREE.Vector3(-10, 1, 19);
+        const sphere2_position = new THREE.Vector3(-27, 3.5, -15);
         this.#sphere2 = new Sphere("textures/Texture_4k/DefaultMaterial_Metallic.png", false, false, false, this.#scene, this.#physicsWorld, sphere2_position);    
         // this.#objectsInUniverse.push(this.#sphere2);
         this.#objectsInXenoverse.push(this.#sphere2);
+        this.#sphere2.disablePhysics();
     }
     
 
@@ -141,7 +151,7 @@ export class World {
         const size = this.#doorDimensions; 
 
         this.#physicsDoor = new CANNON.Body({
-            mass: 0.1, 
+            mass: 0, 
             shape: new CANNON.Box(new CANNON.Vec3(size.x/2, size.y/2, size.z/2)), 
             position: new CANNON.Vec3(this.#door.position.x, this.#door.position.y, this.#door.position.z), 
         });
@@ -412,46 +422,71 @@ export class World {
     }
 
     #AddObjectsFirstRoom() {
-        const generator_position = new THREE.Vector3(25, 1, 0);
-        const generator_scale = new THREE.Vector3(0.01, 0.01, 0.01);
-        const generator = new Object('sci-fi_power_generator_free/scene.gltf', 
-                                     true, false, false, this.#scene, this.#physicsWorld, generator_position, generator_scale);
-        this.#objectsInUniverse.push(generator);
+        this.#physicsWorld.gravity.set(0,0,0);
+        const generator1_position = new THREE.Vector3(27, 1, 0);
+        const generator1_scale = new THREE.Vector3(1, 1, 1);
+        this.#generator1 = new Object('gravity_generator/scene.gltf', 
+                                     true, false, false, this.#scene, this.#physicsWorld, generator1_position, generator1_scale, 0);
+        // this.#objectsInUniverse.push(this.#generator1);
+       
+        const generator2_position = new THREE.Vector3(-27, 1, -15);
+        const generator2_scale = new THREE.Vector3(1, 1, 1);
+        this.#generator2 = new Object('gravity_generator/scene.gltf', 
+                                     false, false, false, this.#scene, this.#physicsWorld, generator2_position, generator2_scale, 0);
+        // this.#objectsInXenoverse.push(this.#generator2);
     
         const lowpoly_position = new THREE.Vector3(-25, 1, 10);
         const lowpoly_scale = new THREE.Vector3(0.01,0.01,0.01);
         const lowpoly = new Object('scifi_generator/scene.gltf', 
-                                     false, false, true, this.#scene, this.#physicsWorld, lowpoly_position, lowpoly_scale);
+                                     false, false, true, this.#scene, this.#physicsWorld, lowpoly_position, lowpoly_scale, 1000);
         this.#objectsInXenoverse.push(lowpoly);
     
         // Si può aggiungere effetto lievitazione
-        const cube_position = new THREE.Vector3(-10, 1, 15);
+        const cube_position = new THREE.Vector3(-10, 2, 15);
         const cube_scale = new THREE.Vector3(0.001, 0.001, 0.001);
         const cube = new Object('generator3/scene.gltf', 
-                                    true, true, false, this.#scene, this.#physicsWorld, cube_position, cube_scale);
+                                    true, true, false, this.#scene, this.#physicsWorld, cube_position, cube_scale, 0);
         this.#objectsInUniverse.push(cube);
         
 
-        const plasma_position = new THREE.Vector3(-20, 1, -27);
+        const plasma_position = new THREE.Vector3(-20, 2, -27);
         const plasma_scale = new THREE.Vector3(0.001,0.001,0.001);
-        const plasma = new Object('plasma/scene.gltf', 
-                                    false, true, false, this.#scene, this.#physicsWorld, plasma_position, plasma_scale);
-        this.#objectsInXenoverse.push(plasma);
+        this.#plasma = new Object('plasma/scene.gltf', 
+                                    true, false, false, this.#scene, this.#physicsWorld, plasma_position, plasma_scale, 0);
+        this.#objectsInUniverse.push(this.#plasma);
     
-        const ring_position = new THREE.Vector3(-10, 1, -18);
+        const ring_position = new THREE.Vector3(-10, 2, -18);
         const ring_scale = new THREE.Vector3(0.1,0.1,0.1);
         const ring = new Object('ring/scene.gltf', 
-                                    true, true, false, this.#scene, this.#physicsWorld, ring_position, ring_scale);
-        this.#objectsInUniverse.push(ring);
+                                    false, true, false, this.#scene, this.#physicsWorld, ring_position, ring_scale, 0);
+        this.#objectsInXenoverse.push(ring);
     
-        const disk_position = new THREE.Vector3(16, 1, -10);
+        const disk_position = new THREE.Vector3(16, 2, -10);
         const disk_scale = new THREE.Vector3(0.002,0.002,0.002);
         const disk = new Object('disk/scene.gltf', 
-                                    false, true, false, this.#scene, this.#physicsWorld, disk_position, disk_scale);
+                                    false, true, false, this.#scene, this.#physicsWorld, disk_position, disk_scale, 0);
         this.#objectsInXenoverse.push(disk);
 
+        const gen_rotating_position = new THREE.Vector3(27.5,0, 26);
+        const gen_rotating_scale = new THREE.Vector3(1,1,1);
+        this.#gen_rotating = new Object('generator_rotate/scene.gltf', 
+                                    true, false, false, this.#scene, this.#physicsWorld, gen_rotating_position, gen_rotating_scale, 0);        
+
+        const freeze_position = new THREE.Vector3(-27.5,1, -24);
+        const freeze_scale = new THREE.Vector3(0.1,0.1,0.1);
+        const freeze = new Object('simple_generatorfixed/scene.gltf', 
+                                    true, false, false, this.#scene, this.#physicsWorld, freeze_position, freeze_scale, 1000);        
+        this.#objectsInUniverse.push(freeze);
+        
+        const table_position = new THREE.Vector3(15, 3, -24);
+        const table_scale = new THREE.Vector3(1,1,1);
+        const table = new Object('generator_bm/scene.gltf', 
+                                    false, false, false, this.#scene, this.#physicsWorld, table_position, table_scale, 500);        
+        this.#objectsInXenoverse.push(table);
         
         
+        this.#physicsWorld.gravity.set(0, -9.8, 0);
+
     }
 
     get sphere1(){
@@ -465,6 +500,14 @@ export class World {
     }
     get cube2(){
         return this.#cube2;
+    }
+
+    get generator1(){
+        return this.#generator1;
+    }
+
+    get generator2(){
+        return this.#generator2;
     }
 
     // Getter for ambient light
@@ -500,6 +543,31 @@ export class World {
     }
     get objectsInXenoverse(){
         return this.#objectsInXenoverse;
+    }
+
+    get plasma(){
+        return this.#plasma;
+    }
+
+    get gen_rotating(){
+        return this.#gen_rotating;
+    }
+
+    ActivateGenRotating(){
+        if(this.#plasma.model && this.#gen_rotating.model &&  this.#plasma.model.position.distanceTo(this.#gen_rotating.model.position) < 3){
+            // console.warn("ECCOLOOO");
+            this.#plasma.setIsVisible(false);
+            this.#plasma.disablePhysics();
+
+            if(!this.#isMessageDoorShowed){
+                this.#isMessageDoorShowed = true;
+                this.setDoorCanBeOpened(true);
+                this.#gameMessage.showUsableMessage("You reactivated the current for the door! Now you can open it");
+                this.CreateUniverseMaze();
+                this.CreateXenoverseMaze();
+                console.warn("MAZE CREATO");
+            }
+        }
     }
 
     setUniverse(value){

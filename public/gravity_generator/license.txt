@@ -1,0 +1,11 @@
+Model Information:
+* title:	Gravity Generator
+* source:	https://sketchfab.com/3d-models/gravity-generator-47b61657fc014648940e22933910ef2b
+* author:	Just8 (https://sketchfab.com/Just8)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Gravity Generator" (https://sketchfab.com/3d-models/gravity-generator-47b61657fc014648940e22933910ef2b) by Just8 (https://sketchfab.com/Just8) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
