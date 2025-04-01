@@ -102,6 +102,24 @@ export class World {
         this.#cube2 = CSG.subtract(cube2, sphere);
         this.#cube2.position.copy(cube2.position);
 
+        const boundingBox1 = new THREE.Box3().setFromObject(this.#cube1); 
+        const size1 = boundingBox1.getSize(new THREE.Vector3()); 
+        const cube1Body = new CANNON.Body({
+            mass: 0, 
+            shape: new CANNON.Box(new CANNON.Vec3(size1.x/2, size1.y/2, size1.z/2)), 
+            position: new CANNON.Vec3(cube1.position.x, cube1.position.y, cube1.position.z), 
+        });
+        this.#physicsWorld.addBody(cube1Body);
+
+        const boundingBox2 = new THREE.Box3().setFromObject(this.#cube2); 
+        const size2 = boundingBox2.getSize(new THREE.Vector3()); 
+        const cube2Body = new CANNON.Body({
+            mass: 0, 
+            shape: new CANNON.Box(new CANNON.Vec3(size2.x/2, size2.y/2, size2.z/2)), 
+            position: new CANNON.Vec3(cube2.position.x, cube2.position.y, cube2.position.z), 
+        });
+        this.#physicsWorld.addBody(cube2Body);
+
         this.#scene.add(this.#cube1);
         this.#scene.add(this.#cube2);
     }
