@@ -32,11 +32,10 @@ export class MazeUniverse{
         const wallTexture = textureLoader.load("textures/bricks.jpg"); 
         wallTexture.wrapS = THREE.RepeatWrapping;
         wallTexture.wrapT = THREE.RepeatWrapping;
-        const repeatX = 15/5; 
-        const repeatZ = 20/5;
-        const repeatY = 10/5;
+        const repeatX = 3; 
+        const repeatY = 2;
         
-        wallTexture.repeat.set(repeatX, repeatY, repeatZ);
+        wallTexture.repeat.set(repeatX, repeatY);
 
         const wall1 = new THREE.Mesh(
             new THREE.BoxGeometry(40, this.#wallHeight, this.#wallSize),
@@ -245,11 +244,10 @@ export class MazeXenoverse{
         const wallTexture = textureLoader.load("textures/bricks.jpg"); 
         wallTexture.wrapS = THREE.RepeatWrapping;
         wallTexture.wrapT = THREE.RepeatWrapping;
-        const repeatX = 15/5; 
-        const repeatZ = 20/5;
-        const repeatY = 10/5;
+        const repeatX = 3; 
+        const repeatY = 2;
         
-        wallTexture.repeat.set(repeatX, repeatY, repeatZ);
+        wallTexture.repeat.set(repeatX, repeatY);
 
         const wall1 = new THREE.Mesh(
             new THREE.BoxGeometry(20, this.#wallHeight, this.#wallSize),

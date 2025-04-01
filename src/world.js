@@ -213,8 +213,8 @@ export class World {
         floor1Texture.wrapS = THREE.RepeatWrapping;
         floor1Texture.wrapT = THREE.RepeatWrapping;
     
-        const repeatX = 100 / 5;
-        const repeatZ = 100 / 5;
+        const repeatX = 20;
+        const repeatZ = 20;
     
         floor1Texture.repeat.set(repeatX, repeatZ);
     
@@ -270,8 +270,8 @@ export class World {
         const ceiling1Texture = textureLoader.load("metal-panel.avif"); 
         ceiling1Texture.wrapS = THREE.RepeatWrapping;
         ceiling1Texture.wrapT = THREE.RepeatWrapping;
-        const repeatX = 60 / 10; 
-        const repeatZ = 60 / 10;
+        const repeatX = 6; 
+        const repeatZ = 6;
     
         ceiling1Texture.repeat.set(repeatX, repeatZ);
     
@@ -320,8 +320,8 @@ export class World {
         const wallTexture = textureLoader.load("metal-panel.avif"); 
         wallTexture.wrapS = THREE.RepeatWrapping;
         wallTexture.wrapT = THREE.RepeatWrapping;
-        const repeatX = 60 / 20; 
-        const repeatZ = 60 / 20;
+        const repeatX = 3; 
+        const repeatZ = 3;
     
         wallTexture.repeat.set(repeatX, repeatZ);
     
@@ -380,8 +380,8 @@ export class World {
         const wall2Texture = textureLoader.load("textures/muro.jpg"); 
         wall2Texture.wrapS = THREE.RepeatWrapping;
         wall2Texture.wrapT = THREE.RepeatWrapping;
-        const repeat2X = 120 / 20; 
-        const repeat2Z = 40 / 20;
+        const repeat2X = 6; 
+        const repeat2Z = 2;
         wall2Texture.repeat.set(repeat2X, repeat2Z);
 
         // Left Wall
