@@ -117,10 +117,11 @@ export class Controller {
                     }
 
                     if(this.#world.door && character_position.distanceTo(this.#world.door.position) < this.#distanceThreshold*5){
-                        if(this.#world.doorCanBeOpened){
+                        if(this.#world.doorCanBeOpened && !this.#world.isDoorOpened){
                             this.#world.OpenDoor();
+                            this.#world.setIsDoorOpened(true);
                         }
-                        else{
+                        else if(!this.#world.doorCanBeOpened){
                             this.#gameMessage.showUsableMessage("The door has no electricity. Reactivate it to open it");
                         }
                     }

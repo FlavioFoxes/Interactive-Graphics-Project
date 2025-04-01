@@ -30,6 +30,7 @@ export class World {
     #isUniverse;
     #isMessageDoorShowed;
     #doorCanBeOpened;
+    #isDoorOpened;
     #mazeUniverse;
     #mazeXenoverse;
 
@@ -54,6 +55,7 @@ export class World {
         this.#objectsInXenoverse = [];
         this.#isUniverse = true;
         this.#doorCanBeOpened = false;
+        this.#isDoorOpened = false;
         this.#isMessageDoorShowed = false;
         this.#Init();
     }
@@ -576,6 +578,14 @@ export class World {
 
     setDoorCanBeOpened(value){
         this.#doorCanBeOpened = value;
+    }
+
+    get isDoorOpened(){
+        return this.#isDoorOpened;
+    }
+
+    setIsDoorOpened(value){
+        this.#isDoorOpened = value;
     }
 
     OpenDoor() {
